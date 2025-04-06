@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import ProductCard from "@/components/product/ProductCard";
+import FeaturedProductShowcase from "@/components/product/FeaturedProductShowcase";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Select, 
@@ -92,21 +93,39 @@ export default function NewArrivals() {
           ))}
         </div>
       ) : sortedProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {sortedProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              slug={product.slug}
-              name={product.name}
-              imageUrl={product.imageUrl}
-              price={product.price}
-              discountPrice={product.discountPrice}
-              stockLevel={product.stockLevel}
-              isNew={true}
+        <>
+          {/* Featured New Arrival Showcase */}
+          {sortedProducts.length > 0 && (
+            <FeaturedProductShowcase 
+              product={{
+                ...sortedProducts[0],
+                description: sortedProducts[0].description || "Be among the first to experience this brand new addition to our collection. Just arrived and already turning heads!"
+              }}
+              properties={[
+                { name: 'Release Date', value: 'New This Week' },
+                { name: 'Available In Store', value: 'Yes' },
+                { name: 'Collection', value: 'Spring 2025' },
+                { name: 'Limited Edition', value: 'Yes' }
+              ]}
             />
-          ))}
-        </div>
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {sortedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                slug={product.slug}
+                name={product.name}
+                imageUrl={product.imageUrl}
+                price={product.price}
+                discountPrice={product.discountPrice}
+                stockLevel={product.stockLevel}
+                isNew={true}
+              />
+            ))}
+          </div>
+        </>
       ) : (
         <div className="text-center py-12">
           <h3 className="text-xl font-medium mb-2">No new products found</h3>

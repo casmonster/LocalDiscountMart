@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import ProductCard from "@/components/product/ProductCard";
+import FeaturedProductShowcase from "@/components/product/FeaturedProductShowcase";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Select, 
@@ -10,6 +11,54 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+
+// Helper function to get category-specific properties
+function getCategoryProperties(categorySlug: string, product: any) {
+  const properties = [];
+  
+  switch (categorySlug) {
+    case 'clothing':
+      properties.push(
+        { name: 'Size', value: 'Medium', type: 'size' },
+        { name: 'Color', value: 'Navy Blue', type: 'color' },
+        { name: 'Material', value: 'Cotton Blend', type: 'material' },
+        { name: 'Style', value: 'Casual' }
+      );
+      break;
+    case 'tableware':
+      properties.push(
+        { name: 'Material', value: 'Ceramic', type: 'material' },
+        { name: 'Dimensions', value: '10" x 10"' },
+        { name: 'Dishwasher Safe', value: 'Yes' },
+        { name: 'Set Size', value: '4 pieces' }
+      );
+      break;
+    case 'kitchen':
+      properties.push(
+        { name: 'Material', value: 'Stainless Steel', type: 'material' },
+        { name: 'Dimensions', value: '12" x 8" x 4"' },
+        { name: 'Dishwasher Safe', value: 'Yes' },
+        { name: 'Heat Resistant', value: 'Up to 450°F' }
+      );
+      break;
+    case 'home-decor':
+      properties.push(
+        { name: 'Material', value: 'Ceramic & Wood', type: 'material' },
+        { name: 'Dimensions', value: '8" x 6" x 10"' },
+        { name: 'Color', value: 'Beige', type: 'color' },
+        { name: 'Style', value: 'Modern Minimalist' }
+      );
+      break;
+    default:
+      // For other categories or new arrivals
+      properties.push(
+        { name: 'Condition', value: 'New' },
+        { name: 'In Store', value: 'Available' }
+      );
+  }
+  
+  return properties;
+}
 
 export default function Category({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -113,21 +162,34 @@ export default function Category({ params }: { params: { slug: string } }) {
           ))}
         </div>
       ) : sortedProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {sortedProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              slug={product.slug}
-              name={product.name}
-              imageUrl={product.imageUrl}
-              price={product.price}
-              discountPrice={product.discountPrice}
-              stockLevel={product.stockLevel}
-              isNew={product.isNew}
+        <>
+          {/* Featured Product Showcase */}
+          {sortedProducts.length > 0 && slug && (
+            <FeaturedProductShowcase 
+              product={{
+                ...sortedProducts[0],
+                description: sortedProducts[0].description || "Experience quality and style with this premium item from our collection."
+              }}
+              properties={getCategoryProperties(slug, sortedProducts[0])}
             />
-          ))}
-        </div>
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {sortedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                slug={product.slug}
+                name={product.name}
+                imageUrl={product.imageUrl}
+                price={product.price}
+                discountPrice={product.discountPrice}
+                stockLevel={product.stockLevel}
+                isNew={product.isNew}
+              />
+            ))}
+          </div>
+        </>
       ) : (
         <div className="text-center py-12">
           <h3 className="text-xl font-medium mb-2">No products found</h3>
