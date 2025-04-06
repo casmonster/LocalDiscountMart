@@ -236,7 +236,14 @@ export class MemStorage implements IStorage {
         categoryId: 1, 
         inStock: true,
         stockLevel: "In Stock",
-        isNew: false
+        isNew: false,
+        sizes: ["S", "M", "L", "XL"],
+        colors: ["Blue", "Light Blue", "Navy"],
+        material: "100% Premium Linen",
+        texture: "Light, breathable weave",
+        dimensions: "Standard fit",
+        weight: "150g",
+        features: ["Breathable", "Wrinkle-resistant", "Button-down collar"]
       },
       { 
         name: "Ceramic Dinner Set", 
@@ -248,7 +255,14 @@ export class MemStorage implements IStorage {
         categoryId: 2, 
         inStock: true,
         stockLevel: "In Stock",
-        isNew: false
+        isNew: false,
+        sizes: ["4-Piece", "8-Piece", "12-Piece"],
+        colors: ["White", "Cream", "Gray"],
+        material: "High-quality ceramic",
+        texture: "Smooth glazed finish",
+        dimensions: "Dinner plate: 10.5\" diameter, Salad plate: 8\" diameter, Bowl: 6\" diameter",
+        weight: "1.2kg per piece",
+        features: ["Dishwasher safe", "Microwave safe", "Chip resistant", "Lead-free"]
       },
       { 
         name: "Knit Sweater", 

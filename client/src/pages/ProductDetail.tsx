@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, AlertCircle, Minus, Plus, Heart } from "lucide-react";
+import { Product } from "@shared/schema";
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -14,11 +15,11 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const [quantity, setQuantity] = useState(1);
   const { addToCart, isLoading: isCartLoading } = useCart();
 
-  const { data: product, isLoading } = useQuery({
+  const { data: product, isLoading } = useQuery<Product>({
     queryKey: [`/api/products/${slug}`],
   });
 
-  const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
+  const { data: relatedProducts, isLoading: relatedLoading } = useQuery<Product[]>({
     queryKey: ["/api/products/category", product?.categoryId],
     enabled: !!product?.categoryId,
   });
@@ -122,9 +123,92 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             )}
           </div>
           
-          <p className="text-gray-700 mb-6">
+          <p className="text-gray-700 mb-4">
             {product.description}
           </p>
+          
+          {/* Product Specifications */}
+          <div className="mb-6 space-y-4">
+            {/* Sizes */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium mb-2">Size</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.sizes.map((size, index) => (
+                    <div 
+                      key={index} 
+                      className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:border-primary cursor-pointer transition"
+                    >
+                      {size}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Colors */}
+            {product.colors && product.colors.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium mb-2">Color</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.colors.map((color, index) => (
+                    <div 
+                      key={index} 
+                      className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:border-primary cursor-pointer transition"
+                    >
+                      {color}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Material and Texture */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {product.material && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Material</h3>
+                  <p className="text-sm text-gray-700">{product.material}</p>
+                </div>
+              )}
+              
+              {product.texture && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Texture</h3>
+                  <p className="text-sm text-gray-700">{product.texture}</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Dimensions and Weight */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {product.dimensions && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Dimensions</h3>
+                  <p className="text-sm text-gray-700">{product.dimensions}</p>
+                </div>
+              )}
+              
+              {product.weight && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Weight</h3>
+                  <p className="text-sm text-gray-700">{product.weight}</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Features */}
+            {product.features && product.features.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium mb-2">Features</h3>
+                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                  {product.features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
           
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">Quantity</label>
