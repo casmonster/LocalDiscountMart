@@ -173,7 +173,7 @@ export default function ProductQuickView({
               <div className="flex items-center mb-4">
                 {product.discountPrice ? (
                   <>
-                    <span className="text-secondary font-bold text-xl mr-2">
+                    <span className="text-blue-800 font-bold text-xl mr-2">
                       {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
                     </span>
                     <span className="text-gray-400 text-sm line-through">
@@ -181,7 +181,7 @@ export default function ProductQuickView({
                     </span>
                   </>
                 ) : (
-                  <span className="text-gray-900 font-bold text-xl">
+                  <span className="text-blue-800 font-bold text-xl">
                     {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
                   </span>
                 )}

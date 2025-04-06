@@ -115,7 +115,7 @@ export default function FeaturedProductShowcase({
               <div className="flex items-center mt-2 mb-4">
                 {product.discountPrice ? (
                   <>
-                    <span className="text-2xl text-secondary font-bold mr-3">
+                    <span className="text-2xl text-blue-800 font-bold mr-3">
                       {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
                     </span>
                     <span className="text-gray-500 text-lg line-through">
@@ -123,7 +123,7 @@ export default function FeaturedProductShowcase({
                     </span>
                   </>
                 ) : (
-                  <span className="text-2xl font-bold">
+                  <span className="text-2xl text-blue-800 font-bold">
                     {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
                   </span>
                 )}

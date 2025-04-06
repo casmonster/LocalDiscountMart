@@ -111,7 +111,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
           <div className="flex items-center mb-4">
             {product.discountPrice ? (
               <>
-                <span className="text-2xl text-secondary font-bold mr-3">
+                <span className="text-2xl text-blue-800 font-bold mr-3">
                   {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
                 </span>
                 <span className="text-gray-500 text-lg line-through">
@@ -122,7 +122,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
                 </span>
               </>
             ) : (
-              <span className="text-2xl font-bold">
+              <span className="text-2xl text-blue-800 font-bold">
                 {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
               </span>
             )}
@@ -237,7 +237,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
                       <div className="flex items-center">
                         {related.discountPrice ? (
                           <>
-                            <span className="text-secondary font-bold mr-2">
+                            <span className="text-blue-800 font-bold mr-2">
                               {formatRwandanFrancs(convertToRwandanFrancs(related.discountPrice))}
                             </span>
                             <span className="text-gray-500 text-sm line-through">
@@ -245,7 +245,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
                             </span>
                           </>
                         ) : (
-                          <span className="font-bold">
+                          <span className="text-blue-800 font-bold">
                             {formatRwandanFrancs(convertToRwandanFrancs(related.price))}
                           </span>
                         )}

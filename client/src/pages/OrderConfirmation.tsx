@@ -13,6 +13,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, MapPin, Phone, Mail } from "lucide-react";
+import { formatRwandanFrancs, convertToRwandanFrancs } from "@/lib/currency";
 
 export default function OrderConfirmation({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -82,7 +83,7 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
               </div>
               <div>
                 <p className="text-gray-500">Total Amount:</p>
-                <p className="font-medium">${order.totalAmount.toFixed(2)}</p>
+                <p className="font-medium text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(order.totalAmount))}</p>
               </div>
               <div>
                 <p className="text-gray-500">Status:</p>
@@ -123,10 +124,10 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
                     <p className="font-medium">{item.product.name}</p>
                     <div className="flex justify-between">
                       <p className="text-sm text-gray-500">
-                        Qty: {item.quantity} × ${item.price.toFixed(2)}
+                        Qty: {item.quantity} × {formatRwandanFrancs(convertToRwandanFrancs(item.price))}
                       </p>
-                      <p className="font-medium">
-                        ${(item.quantity * item.price).toFixed(2)}
+                      <p className="font-medium text-blue-800">
+                        {formatRwandanFrancs(convertToRwandanFrancs(item.quantity * item.price))}
                       </p>
                     </div>
                   </div>
@@ -137,7 +138,7 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
               
               <div className="flex justify-between font-bold">
                 <span>Total:</span>
-                <span>${order.totalAmount.toFixed(2)}</span>
+                <span className="text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(order.totalAmount))}</span>
               </div>
             </div>
           </div>
@@ -151,9 +152,9 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
             </p>
             <div className="text-sm">
               <p className="font-medium">DiscountMart</p>
-              <p>123 Main Street</p>
-              <p>Anytown, ST 12345</p>
-              <p className="mt-2">Store Hours: Mon-Sat 9AM-8PM, Sun 10AM-5PM</p>
+              <p>15 KN 4 Ave</p>
+              <p>Downtown Kigali, Rwanda</p>
+              <p className="mt-2">Store Hours: Mon-Fri 9AM-8PM, Sat 9AM-6PM, Sun 10AM-5PM</p>
             </div>
           </div>
         </CardContent>

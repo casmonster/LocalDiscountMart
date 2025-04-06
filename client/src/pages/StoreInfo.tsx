@@ -14,7 +14,7 @@ export default function StoreInfo() {
               <div className="text-center p-6">
                 <MapPin className="h-16 w-16 text-primary mx-auto mb-4" />
                 <p className="text-lg font-medium">DiscountMart Store Location</p>
-                <p className="text-gray-600">123 Main Street, Anytown, ST 12345</p>
+                <p className="text-gray-600">15 KN 4 Ave, Downtown Kigali, Rwanda</p>
               </div>
             </div>
           </div>
@@ -32,7 +32,7 @@ export default function StoreInfo() {
                   </div>
                   <div>
                     <p className="font-medium">Address:</p>
-                    <p>123 Main Street, Anytown, ST 12345</p>
+                    <p>15 KN 4 Ave, Downtown Kigali, Rwanda</p>
                   </div>
                 </div>
                 
@@ -42,7 +42,7 @@ export default function StoreInfo() {
                   </div>
                   <div>
                     <p className="font-medium">Phone:</p>
-                    <p>(555) 123-4567</p>
+                    <p>+250 788 123 456</p>
                   </div>
                 </div>
                 
@@ -52,7 +52,7 @@ export default function StoreInfo() {
                   </div>
                   <div>
                     <p className="font-medium">Email:</p>
-                    <p>info@discountmart.com</p>
+                    <p>info@discountmart.rw</p>
                   </div>
                 </div>
               </div>

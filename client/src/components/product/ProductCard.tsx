@@ -217,7 +217,7 @@ export default function ProductCard({
               <div className="flex items-center mt-2">
                 {discountPrice ? (
                   <>
-                    <span className="text-secondary font-bold mr-2 text-lg">
+                    <span className="text-blue-800 font-bold mr-2 text-lg">
                       {formatRwandanFrancs(convertToRwandanFrancs(discountPrice))}
                     </span>
                     <span className="text-gray-400 text-sm line-through">
@@ -225,7 +225,7 @@ export default function ProductCard({
                     </span>
                   </>
                 ) : (
-                  <span className="text-gray-900 font-bold mr-2 text-lg">
+                  <span className="text-blue-800 font-bold mr-2 text-lg">
                     {formatRwandanFrancs(convertToRwandanFrancs(price))}
                   </span>
                 )}

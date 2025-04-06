@@ -27,6 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Minus, Plus } from "lucide-react";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 const checkoutFormSchema = z.object({
   customerName: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -250,8 +251,8 @@ export default function Checkout() {
                       />
                       <div className="ml-4 flex-grow">
                         <h3 className="font-medium">{item.product.name}</h3>
-                        <p className="text-secondary font-bold">
-                          ${(item.product.discountPrice || item.product.price).toFixed(2)}
+                        <p className="text-blue-800 font-bold">
+                          {formatRwandanFrancs(convertToRwandanFrancs(item.product.discountPrice || item.product.price))}
                         </p>
                         <div className="flex items-center mt-2">
                           <Button
@@ -291,16 +292,16 @@ export default function Checkout() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span className="font-medium">${getCartTotal().toFixed(2)}</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getCartTotal())}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax (8%):</span>
-                  <span className="font-medium">${getTaxAmount().toFixed(2)}</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getTaxAmount())}</span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between text-lg">
                   <span className="font-bold">Total:</span>
-                  <span className="font-bold">${getFinalTotal().toFixed(2)}</span>
+                  <span className="font-bold text-blue-800">{formatRwandanFrancs(getFinalTotal())}</span>
                 </div>
               </div>
             </CardContent>
