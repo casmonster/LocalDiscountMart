@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { CheckCircle, AlertCircle, ShoppingCart, Eye, Heart, MessageCircle, Share2 } from "lucide-react";
+import { CheckCircle, AlertCircle, ShoppingCart, Eye } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -28,7 +28,6 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
   const { toast } = useToast();
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -51,34 +50,6 @@ export default function ProductCard({
     } finally {
       setIsAdding(false);
     }
-  };
-  
-  const handleLike = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsLiked(!isLiked);
-    toast({
-      title: isLiked ? "Removed from favorites" : "Added to favorites",
-      description: isLiked ? `${name} has been removed from your favorites.` : `${name} has been added to your favorites.`,
-    });
-  };
-  
-  const handleComment = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toast({
-      title: "Comments",
-      description: "Comment feature will be available soon!",
-    });
-  };
-  
-  const handleShare = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toast({
-      title: "Share",
-      description: "Share feature will be available soon!",
-    });
   };
 
   const isInStock = stockLevel === "In Stock";
@@ -208,33 +179,6 @@ export default function ProductCard({
                 Currently Unavailable
               </span>
             )}
-          </div>
-          
-          {/* Social Action Buttons */}
-          <div className="flex justify-between border-t border-gray-100 mt-3 pt-3">
-            <button 
-              onClick={handleLike} 
-              className={`flex items-center text-xs gap-1 px-2 py-1 rounded-full transition-colors ${isLiked ? 'text-red-500 bg-red-50' : 'text-gray-500 hover:text-red-500'}`}
-            >
-              <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-red-500 stroke-red-500' : ''}`} />
-              <span>Like</span>
-            </button>
-            
-            <button 
-              onClick={handleComment} 
-              className="flex items-center text-xs gap-1 px-2 py-1 rounded-full text-gray-500 hover:text-blue-500 hover:bg-blue-50 transition-colors"
-            >
-              <MessageCircle className="h-3.5 w-3.5" />
-              <span>Comment</span>
-            </button>
-            
-            <button 
-              onClick={handleShare} 
-              className="flex items-center text-xs gap-1 px-2 py-1 rounded-full text-gray-500 hover:text-green-500 hover:bg-green-50 transition-colors"
-            >
-              <Share2 className="h-3.5 w-3.5" />
-              <span>Share</span>
-            </button>
           </div>
         </div>
       </Link>

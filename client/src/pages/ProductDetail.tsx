@@ -6,23 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, AlertCircle, Minus, Plus, Heart, MessageCircle, Share2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Product } from "@shared/schema";
+import { CheckCircle, AlertCircle, Minus, Plus, Heart } from "lucide-react";
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const [, setLocation] = useLocation();
   const [quantity, setQuantity] = useState(1);
-  const [isLiked, setIsLiked] = useState(false);
   const { addToCart, isLoading: isCartLoading } = useCart();
-  const { toast } = useToast();
 
-  const { data: product, isLoading } = useQuery<Product>({
+  const { data: product, isLoading } = useQuery({
     queryKey: [`/api/products/${slug}`],
   });
 
-  const { data: relatedProducts, isLoading: relatedLoading } = useQuery<Product[]>({
+  const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
     queryKey: ["/api/products/category", product?.categoryId],
     enabled: !!product?.categoryId,
   });
@@ -36,35 +32,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const handleAddToCart = () => {
     if (product) {
       addToCart(product.id, quantity);
-      toast({
-        title: "Added to cart",
-        description: `${product.name} has been added to your cart.`,
-      });
     }
-  };
-  
-  const handleToggleLike = () => {
-    setIsLiked(!isLiked);
-    toast({
-      title: isLiked ? "Removed from favorites" : "Added to favorites",
-      description: isLiked 
-        ? `${product?.name} has been removed from your favorites.` 
-        : `${product?.name} has been added to your favorites.`,
-    });
-  };
-  
-  const handleComment = () => {
-    toast({
-      title: "Comments",
-      description: "Comment feature will be available soon!",
-    });
-  };
-  
-  const handleShare = () => {
-    toast({
-      title: "Share",
-      description: "Share feature will be available soon!",
-    });
   };
 
   const incrementQuantity = () => setQuantity(q => q + 1);
@@ -154,92 +122,9 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             )}
           </div>
           
-          <p className="text-gray-700 mb-4">
+          <p className="text-gray-700 mb-6">
             {product.description}
           </p>
-          
-          {/* Product Specifications */}
-          <div className="mb-6 space-y-4">
-            {/* Sizes */}
-            {product.sizes && product.sizes.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium mb-2">Size</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size, index) => (
-                    <div 
-                      key={index} 
-                      className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:border-primary cursor-pointer transition"
-                    >
-                      {size}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Colors */}
-            {product.colors && product.colors.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium mb-2">Color</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.colors.map((color, index) => (
-                    <div 
-                      key={index} 
-                      className="px-3 py-1 border border-gray-300 rounded-md text-sm hover:border-primary cursor-pointer transition"
-                    >
-                      {color}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {/* Material and Texture */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {product.material && (
-                <div>
-                  <h3 className="text-sm font-medium mb-1">Material</h3>
-                  <p className="text-sm text-gray-700">{product.material}</p>
-                </div>
-              )}
-              
-              {product.texture && (
-                <div>
-                  <h3 className="text-sm font-medium mb-1">Texture</h3>
-                  <p className="text-sm text-gray-700">{product.texture}</p>
-                </div>
-              )}
-            </div>
-            
-            {/* Dimensions and Weight */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {product.dimensions && (
-                <div>
-                  <h3 className="text-sm font-medium mb-1">Dimensions</h3>
-                  <p className="text-sm text-gray-700">{product.dimensions}</p>
-                </div>
-              )}
-              
-              {product.weight && (
-                <div>
-                  <h3 className="text-sm font-medium mb-1">Weight</h3>
-                  <p className="text-sm text-gray-700">{product.weight}</p>
-                </div>
-              )}
-            </div>
-            
-            {/* Features */}
-            {product.features && product.features.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium mb-2">Features</h3>
-                <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                  {product.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
           
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">Quantity</label>
@@ -276,47 +161,8 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             >
               Add to Cart
             </Button>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className={`${isLiked ? 'text-red-500 bg-red-50 border-red-200' : 'text-gray-500'} hover:text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors`}
-              onClick={handleToggleLike}
-            >
-              <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500' : ''}`} />
-            </Button>
-          </div>
-          
-          {/* Social Action Bar */}
-          <div className="flex justify-between mb-6 border bg-gray-50 rounded-lg p-2">
-            <Button 
-              variant="ghost" 
-              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-red-500 hover:bg-red-50/50"
-              onClick={handleToggleLike}
-            >
-              <Heart className={`h-4 w-4 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-              <span className="text-sm">{isLiked ? 'Liked' : 'Like'}</span>
-            </Button>
-            
-            <Separator orientation="vertical" className="h-8 my-auto" />
-            
-            <Button 
-              variant="ghost" 
-              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-blue-500 hover:bg-blue-50/50"
-              onClick={handleComment}
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span className="text-sm">Comment</span>
-            </Button>
-            
-            <Separator orientation="vertical" className="h-8 my-auto" />
-            
-            <Button 
-              variant="ghost" 
-              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-green-500 hover:bg-green-50/50"
-              onClick={handleShare}
-            >
-              <Share2 className="h-4 w-4" />
-              <span className="text-sm">Share</span>
+            <Button variant="outline" size="icon" className="text-gray-500">
+              <Heart className="h-5 w-5" />
             </Button>
           </div>
           

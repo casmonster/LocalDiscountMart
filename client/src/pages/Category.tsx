@@ -21,7 +21,7 @@ export default function Category({ params }: { params: { slug: string } }) {
   });
 
   const { data: products, isLoading: productsLoading } = useQuery({
-    queryKey: [`/api/products/category/${category?.id}`],
+    queryKey: ["/api/products/category", category?.id],
     enabled: !!category?.id,
   });
 

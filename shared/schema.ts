@@ -27,15 +27,6 @@ export const products = pgTable("products", {
   inStock: boolean("in_stock").notNull().default(true),
   stockLevel: text("stock_level").notNull().default("In Stock"),
   isNew: boolean("is_new").notNull().default(false),
-  
-  // Additional product attributes
-  sizes: text("sizes").array(),
-  colors: text("colors").array(),
-  material: text("material"),
-  texture: text("texture"),
-  dimensions: text("dimensions"),
-  weight: text("weight"),
-  features: text("features").array(),
 });
 
 export const insertProductSchema = createInsertSchema(products).omit({
