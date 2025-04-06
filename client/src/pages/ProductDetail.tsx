@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, AlertCircle, Minus, Plus, Heart } from "lucide-react";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -111,17 +112,19 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             {product.discountPrice ? (
               <>
                 <span className="text-2xl text-secondary font-bold mr-3">
-                  ${product.discountPrice.toFixed(2)}
+                  {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
                 </span>
                 <span className="text-gray-500 text-lg line-through">
-                  ${product.price.toFixed(2)}
+                  {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
                 </span>
                 <span className="ml-2 bg-secondary text-white text-sm font-bold px-2 py-1 rounded">
                   {discountPercentage}% OFF
                 </span>
               </>
             ) : (
-              <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+              <span className="text-2xl font-bold">
+                {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
+              </span>
             )}
           </div>
           
@@ -234,11 +237,17 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
                       <div className="flex items-center">
                         {related.discountPrice ? (
                           <>
-                            <span className="text-secondary font-bold mr-2">${related.discountPrice.toFixed(2)}</span>
-                            <span className="text-gray-500 text-sm line-through">${related.price.toFixed(2)}</span>
+                            <span className="text-secondary font-bold mr-2">
+                              {formatRwandanFrancs(convertToRwandanFrancs(related.discountPrice))}
+                            </span>
+                            <span className="text-gray-500 text-sm line-through">
+                              {formatRwandanFrancs(convertToRwandanFrancs(related.price))}
+                            </span>
                           </>
                         ) : (
-                          <span className="font-bold">${related.price.toFixed(2)}</span>
+                          <span className="font-bold">
+                            {formatRwandanFrancs(convertToRwandanFrancs(related.price))}
+                          </span>
                         )}
                       </div>
                     </div>

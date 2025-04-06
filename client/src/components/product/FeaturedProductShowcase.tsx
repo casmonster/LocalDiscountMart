@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { Heart, ShoppingCart, Plus, Minus, Check } from "lucide-react";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 type ProductProperty = {
   name: string;
@@ -115,15 +116,15 @@ export default function FeaturedProductShowcase({
                 {product.discountPrice ? (
                   <>
                     <span className="text-2xl text-secondary font-bold mr-3">
-                      ${product.discountPrice.toFixed(2)}
+                      {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
                     </span>
                     <span className="text-gray-500 text-lg line-through">
-                      ${product.price.toFixed(2)}
+                      {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
                     </span>
                   </>
                 ) : (
                   <span className="text-2xl font-bold">
-                    ${product.price.toFixed(2)}
+                    {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
                   </span>
                 )}
               </div>

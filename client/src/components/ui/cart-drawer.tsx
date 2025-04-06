@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, Minus, X, ShoppingCart, AlertCircle } from "lucide-react";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 type CartDrawerProps = {
   open: boolean;
@@ -40,7 +41,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   };
 
   const formatCurrency = (amount: number) => {
-    return amount.toFixed(2);
+    return formatRwandanFrancs(convertToRwandanFrancs(amount));
   };
 
   return (
@@ -112,16 +113,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span className="font-medium">${formatCurrency(getCartTotal())}</span>
+                  <span className="font-medium">{formatCurrency(getCartTotal())}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Tax (8%)</span>
-                  <span className="font-medium">${formatCurrency(getTaxAmount())}</span>
+                  <span className="font-medium">{formatCurrency(getTaxAmount())}</span>
                 </div>
                 <Separator className="my-2 bg-gray-200" />
                 <div className="flex justify-between text-lg">
                   <span className="font-bold">Total</span>
-                  <span className="font-bold text-primary">${formatCurrency(getFinalTotal())}</span>
+                  <span className="font-bold text-primary">{formatCurrency(getFinalTotal())}</span>
                 </div>
               </div>
 
@@ -217,11 +218,11 @@ function CartItem({ item, onRemove, onUpdateQuantity }: CartItemProps) {
           <div className="flex items-center mt-1">
             {hasDiscount ? (
               <>
-                <span className="text-secondary font-bold">${price.toFixed(2)}</span>
-                <span className="text-gray-400 text-xs line-through ml-2">${item.product.price.toFixed(2)}</span>
+                <span className="text-secondary font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price))}</span>
+                <span className="text-gray-400 text-xs line-through ml-2">{formatRwandanFrancs(convertToRwandanFrancs(item.product.price))}</span>
               </>
             ) : (
-              <span className="font-bold">${price.toFixed(2)}</span>
+              <span className="font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price))}</span>
             )}
           </div>
           
@@ -258,7 +259,7 @@ function CartItem({ item, onRemove, onUpdateQuantity }: CartItemProps) {
             
             <div className="ml-auto text-right">
               <p className="text-xs text-gray-500">Subtotal</p>
-              <p className="font-bold text-primary">${subtotal.toFixed(2)}</p>
+              <p className="font-bold text-primary">{formatRwandanFrancs(convertToRwandanFrancs(subtotal))}</p>
             </div>
           </div>
         </div>

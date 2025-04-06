@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import ProductQuickView from "./ProductQuickView";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 type ProductCardProps = {
   id: number;
@@ -212,15 +213,21 @@ export default function ProductCard({
                 {name}
               </h3>
               
-              {/* Price display */}
+              {/* Price display - Rwandan Francs */}
               <div className="flex items-center mt-2">
                 {discountPrice ? (
                   <>
-                    <span className="text-secondary font-bold mr-2 text-lg">${discountPrice.toFixed(2)}</span>
-                    <span className="text-gray-400 text-sm line-through">${price.toFixed(2)}</span>
+                    <span className="text-secondary font-bold mr-2 text-lg">
+                      {formatRwandanFrancs(convertToRwandanFrancs(discountPrice))}
+                    </span>
+                    <span className="text-gray-400 text-sm line-through">
+                      {formatRwandanFrancs(convertToRwandanFrancs(price))}
+                    </span>
                   </>
                 ) : (
-                  <span className="text-gray-900 font-bold mr-2 text-lg">${price.toFixed(2)}</span>
+                  <span className="text-gray-900 font-bold mr-2 text-lg">
+                    {formatRwandanFrancs(convertToRwandanFrancs(price))}
+                  </span>
                 )}
               </div>
 

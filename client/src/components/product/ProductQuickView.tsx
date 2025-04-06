@@ -19,6 +19,7 @@ import {
   Minus,
   Plus
 } from "lucide-react";
+import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
 
 interface ProductQuickViewProps {
   open: boolean;
@@ -172,11 +173,17 @@ export default function ProductQuickView({
               <div className="flex items-center mb-4">
                 {product.discountPrice ? (
                   <>
-                    <span className="text-secondary font-bold text-xl mr-2">${product.discountPrice.toFixed(2)}</span>
-                    <span className="text-gray-400 text-sm line-through">${product.price.toFixed(2)}</span>
+                    <span className="text-secondary font-bold text-xl mr-2">
+                      {formatRwandanFrancs(convertToRwandanFrancs(product.discountPrice))}
+                    </span>
+                    <span className="text-gray-400 text-sm line-through">
+                      {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
+                    </span>
                   </>
                 ) : (
-                  <span className="text-gray-900 font-bold text-xl">${product.price.toFixed(2)}</span>
+                  <span className="text-gray-900 font-bold text-xl">
+                    {formatRwandanFrancs(convertToRwandanFrancs(product.price))}
+                  </span>
                 )}
               </div>
               
