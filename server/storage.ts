@@ -242,7 +242,7 @@ export class MemStorage implements IStorage {
         name: "Ceramic Dinner Set", 
         slug: "ceramic-dinner-set", 
         description: "Elegant ceramic dinner set for a family of four.", 
-        imageUrl: "https://images.unsplash.com/photo-1523238250744-e19f1600689e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
         price: 59.99, 
         discountPrice: 44.99, 
         categoryId: 2, 
@@ -321,6 +321,42 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true
+      },
+      { 
+        name: "Premium Cooking Pot Set", 
+        slug: "premium-cooking-pot-set", 
+        description: "High-quality stainless steel cooking pot set for all your kitchen needs.", 
+        imageUrl: "https://images.unsplash.com/photo-1584990347883-41a8518b4485?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 89.99, 
+        discountPrice: 69.99, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Glass Drinkware Collection", 
+        slug: "glass-drinkware-collection", 
+        description: "Elegant set of drinking glasses including water, wine, and cocktail glasses.", 
+        imageUrl: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 39.99, 
+        discountPrice: null, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Ceramic Plate Set", 
+        slug: "ceramic-plate-set", 
+        description: "Beautiful ceramic plates for everyday use or special occasions.", 
+        imageUrl: "https://images.unsplash.com/photo-1516470930795-91939e739dcc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 49.99, 
+        discountPrice: 34.99, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "Low Stock",
+        isNew: false
       }
     ];
     
