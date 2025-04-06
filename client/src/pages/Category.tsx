@@ -72,6 +72,12 @@ export default function Category({ params }: { params: { slug: string } }) {
   const { data: products, isLoading: productsLoading } = useQuery({
     queryKey: [`/api/products/category/${category?.id}`],
     enabled: !!category?.id,
+    onSuccess: (data) => {
+      console.log("Category products loaded:", {category: category?.slug, id: category?.id, count: data?.length, data});
+    },
+    onError: (error) => {
+      console.error("Error loading category products:", error);
+    }
   });
 
   useEffect(() => {
