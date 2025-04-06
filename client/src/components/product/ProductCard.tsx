@@ -1,7 +1,8 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { CheckCircle, AlertCircle, ShoppingCart, Eye } from "lucide-react";
+import { useWishlist } from "@/context/WishlistContext";
+import { CheckCircle, AlertCircle, ShoppingCart, Eye, Heart } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -27,8 +28,11 @@ export default function ProductCard({
   isNew = false,
 }: ProductCardProps) {
   const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const [isAdding, setIsAdding] = useState(false);
   const { toast } = useToast();
+
+  const inWishlist = isInWishlist(id);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -50,6 +54,27 @@ export default function ProductCard({
     } finally {
       setIsAdding(false);
     }
+  };
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    toggleWishlist({
+      id,
+      slug,
+      name,
+      imageUrl,
+      price,
+      discountPrice
+    });
+    
+    toast({
+      title: inWishlist ? "Removed from wishlist" : "Added to wishlist",
+      description: inWishlist 
+        ? `${name} has been removed from your wishlist.`
+        : `${name} has been added to your wishlist.`,
+    });
   };
 
   const isInStock = stockLevel === "In Stock";
@@ -87,6 +112,23 @@ export default function ProductCard({
               NEW
             </div>
           )}
+
+          {/* Wishlist button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`absolute top-3 right-3 z-10 h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-colors ${
+              inWishlist 
+                ? 'text-secondary hover:text-secondary/80' 
+                : 'text-gray-600 hover:text-secondary'
+            }`}
+            onClick={handleToggleWishlist}
+          >
+            <Heart 
+              className="h-4 w-4" 
+              fill={inWishlist ? 'currentColor' : 'none'} 
+            />
+          </Button>
 
           {/* Overlay with buttons */}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">

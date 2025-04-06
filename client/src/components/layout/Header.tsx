@@ -4,7 +4,7 @@ import { useCart } from "@/context/CartContext";
 import CartDrawer from "@/components/ui/cart-drawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, MapPin } from "lucide-react";
+import { Search, ShoppingCart, MapPin, Heart } from "lucide-react";
 
 export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -102,6 +102,15 @@ export default function Header() {
         
         {/* Navigation Actions */}
         <div className="flex items-center gap-4">
+          <Link href="/wishlist">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="text-gray-700 hover:text-secondary relative p-2 hover:bg-secondary/5 rounded-full transition-colors"
+            >
+              <Heart className="h-5 w-5" />
+            </Button>
+          </Link>
           <Button 
             variant="ghost" 
             size="icon"
