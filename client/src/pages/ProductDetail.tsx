@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useCart } from "@/context/CartContext";
+import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
+import RecentlyViewedProducts from "@/components/product/RecentlyViewedProducts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +15,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const [, setLocation] = useLocation();
   const [quantity, setQuantity] = useState(1);
   const { addToCart, isLoading: isCartLoading } = useCart();
+  const { addToRecentlyViewed } = useRecentlyViewed();
 
   const { data: product, isLoading } = useQuery({
     queryKey: [`/api/products/${slug}`],
@@ -22,6 +25,22 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
     queryKey: ["/api/products/category", product?.categoryId],
     enabled: !!product?.categoryId,
   });
+
+  // Add product to recently viewed when it loads
+  useEffect(() => {
+    if (product && product.id) {
+      addToRecentlyViewed({
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        discountPrice: product.discountPrice,
+        stockLevel: product.stockLevel,
+        categoryId: product.categoryId
+      });
+    }
+  }, [product, addToRecentlyViewed]);
 
   useEffect(() => {
     if (product === null) {
@@ -230,6 +249,9 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
           )}
         </div>
       )}
+      
+      {/* Recently Viewed Products */}
+      <RecentlyViewedProducts />
     </div>
   );
 }

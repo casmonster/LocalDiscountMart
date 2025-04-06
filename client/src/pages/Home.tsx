@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import ProductCard from "@/components/product/ProductCard";
 import CategoryCard from "@/components/product/CategoryCard";
+import LastViewedProduct from "@/components/product/LastViewedProduct";
+import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
+  const { lastViewedProduct } = useRecentlyViewed();
   const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["/api/categories"],
   });
@@ -147,6 +150,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Last Viewed Product */}
+      {lastViewedProduct && (
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold">Recently Viewed</h2>
+            </div>
+            <LastViewedProduct />
+          </div>
+        </section>
+      )}
+      
       {/* New Arrivals */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">

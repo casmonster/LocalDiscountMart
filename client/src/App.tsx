@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -49,8 +50,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <WishlistProvider>
-          <Router />
-          <Toaster />
+          <RecentlyViewedProvider>
+            <Router />
+            <Toaster />
+          </RecentlyViewedProvider>
         </WishlistProvider>
       </CartProvider>
     </QueryClientProvider>
