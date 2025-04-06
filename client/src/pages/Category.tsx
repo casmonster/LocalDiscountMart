@@ -81,6 +81,9 @@ export default function Category({ params }: { params: { slug: string } }) {
   });
 
   useEffect(() => {
+    // Log more information about the category and products
+    console.log("Category data:", category);
+    
     if (category === null) {
       setLocation("/not-found");
     }
