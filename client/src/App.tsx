@@ -13,6 +13,8 @@ import ProductDetail from "@/pages/ProductDetail";
 import Checkout from "@/pages/Checkout";
 import OrderConfirmation from "@/pages/OrderConfirmation";
 import StoreInfo from "@/pages/StoreInfo";
+import NewArrivals from "@/pages/NewArrivals";
+import Clearance from "@/pages/Clearance";
 
 function Router() {
   return (
@@ -26,6 +28,8 @@ function Router() {
           <Route path="/checkout" component={Checkout} />
           <Route path="/order-confirmation/:id" component={OrderConfirmation} />
           <Route path="/store-info" component={StoreInfo} />
+          <Route path="/new-arrivals" component={NewArrivals} />
+          <Route path="/clearance" component={Clearance} />
           <Route component={NotFound} />
         </Switch>
       </div>
