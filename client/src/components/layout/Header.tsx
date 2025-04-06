@@ -4,14 +4,17 @@ import { useCart } from "@/context/CartContext";
 import CartDrawer from "@/components/ui/cart-drawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, MapPin } from "lucide-react";
+import { Search, ShoppingCart, MapPin, Heart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [location, navigate] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [favoriteCount, setFavoriteCount] = useState(0);
   const { itemCount } = useCart();
+  const { toast } = useToast();
   
   // Handle scroll effect for sticky header
   useEffect(() => {
@@ -105,6 +108,25 @@ export default function Header() {
           <Button 
             variant="ghost" 
             size="icon"
+            className="text-gray-700 hover:text-red-500 relative p-2 hover:bg-red-50 rounded-full transition-colors"
+            onClick={() => {
+              toast({
+                title: "Favorites",
+                description: "Your favorites feature will be available soon!",
+              });
+            }}
+          >
+            <Heart className="h-6 w-6" />
+            {favoriteCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-sm">
+                {favoriteCount}
+              </span>
+            )}
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon"
             className="text-gray-700 hover:text-primary relative p-2 hover:bg-primary/5 rounded-full transition-colors"
             onClick={() => setIsCartOpen(true)}
           >
@@ -115,6 +137,7 @@ export default function Header() {
               </span>
             )}
           </Button>
+          
           <Link href="/store-info">
             <Button variant="ghost" size="icon" className="text-gray-700 hover:text-primary p-2 hover:bg-primary/5 rounded-full transition-colors">
               <MapPin className="h-6 w-6" />

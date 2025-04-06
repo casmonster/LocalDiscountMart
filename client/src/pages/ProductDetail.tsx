@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, AlertCircle, Minus, Plus, Heart } from "lucide-react";
+import { CheckCircle, AlertCircle, Minus, Plus, Heart, MessageCircle, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { Product } from "@shared/schema";
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const [, setLocation] = useLocation();
   const [quantity, setQuantity] = useState(1);
+  const [isLiked, setIsLiked] = useState(false);
   const { addToCart, isLoading: isCartLoading } = useCart();
+  const { toast } = useToast();
 
   const { data: product, isLoading } = useQuery<Product>({
     queryKey: [`/api/products/${slug}`],
@@ -33,7 +36,35 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const handleAddToCart = () => {
     if (product) {
       addToCart(product.id, quantity);
+      toast({
+        title: "Added to cart",
+        description: `${product.name} has been added to your cart.`,
+      });
     }
+  };
+  
+  const handleToggleLike = () => {
+    setIsLiked(!isLiked);
+    toast({
+      title: isLiked ? "Removed from favorites" : "Added to favorites",
+      description: isLiked 
+        ? `${product?.name} has been removed from your favorites.` 
+        : `${product?.name} has been added to your favorites.`,
+    });
+  };
+  
+  const handleComment = () => {
+    toast({
+      title: "Comments",
+      description: "Comment feature will be available soon!",
+    });
+  };
+  
+  const handleShare = () => {
+    toast({
+      title: "Share",
+      description: "Share feature will be available soon!",
+    });
   };
 
   const incrementQuantity = () => setQuantity(q => q + 1);
@@ -245,8 +276,47 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             >
               Add to Cart
             </Button>
-            <Button variant="outline" size="icon" className="text-gray-500">
-              <Heart className="h-5 w-5" />
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className={`${isLiked ? 'text-red-500 bg-red-50 border-red-200' : 'text-gray-500'} hover:text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors`}
+              onClick={handleToggleLike}
+            >
+              <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500' : ''}`} />
+            </Button>
+          </div>
+          
+          {/* Social Action Bar */}
+          <div className="flex justify-between mb-6 border bg-gray-50 rounded-lg p-2">
+            <Button 
+              variant="ghost" 
+              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-red-500 hover:bg-red-50/50"
+              onClick={handleToggleLike}
+            >
+              <Heart className={`h-4 w-4 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+              <span className="text-sm">{isLiked ? 'Liked' : 'Like'}</span>
+            </Button>
+            
+            <Separator orientation="vertical" className="h-8 my-auto" />
+            
+            <Button 
+              variant="ghost" 
+              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-blue-500 hover:bg-blue-50/50"
+              onClick={handleComment}
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span className="text-sm">Comment</span>
+            </Button>
+            
+            <Separator orientation="vertical" className="h-8 my-auto" />
+            
+            <Button 
+              variant="ghost" 
+              className="flex-1 flex items-center justify-center gap-1 text-gray-600 hover:text-green-500 hover:bg-green-50/50"
+              onClick={handleShare}
+            >
+              <Share2 className="h-4 w-4" />
+              <span className="text-sm">Share</span>
             </Button>
           </div>
           
