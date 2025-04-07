@@ -214,8 +214,8 @@ export class MemStorage implements IStorage {
     // Categories
     const categories: InsertCategory[] = [
       { name: "Clothing", slug: "clothing", imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
-      { name: "Tableware", slug: "tableware", imageUrl: "https://images.unsplash.com/photo-1556909114-44e3e9699a2b?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
-      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
+      { name: "Tableware", slug: "tableware", imageUrl: "https://images.pexels.com/photos/6127347/pexels-photo-6127347.jpeg?auto=compress&cs=tinysrgb&w=500" },
+      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.pexels.com/photos/4969892/pexels-photo-4969892.jpeg?auto=compress&cs=tinysrgb&w=500" },
       { name: "Home Decor", slug: "home-decor", imageUrl: "https://images.unsplash.com/photo-1567016432779-094069958ea5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
     ];
     
