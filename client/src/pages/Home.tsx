@@ -50,7 +50,7 @@ export default function Home() {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8 text-center">Shop by Category</h2>
-          
+
           {categoriesLoading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {Array(4).fill(0).map((_, i) => (
@@ -83,7 +83,7 @@ export default function Home() {
               View All
             </Link>
           </div>
-          
+
           {featuredLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array(4).fill(0).map((_, i) => (
@@ -161,7 +161,7 @@ export default function Home() {
           </div>
         </section>
       )}
-      
+
       {/* New Arrivals */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -171,7 +171,7 @@ export default function Home() {
               View All
             </Link>
           </div>
-          
+
           {newProductsLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array(4).fill(0).map((_, i) => (
@@ -212,7 +212,7 @@ export default function Home() {
       <section id="store-info" className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8 text-center">Our Store</h2>
-          
+
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-1/2">
               <div className="rounded-lg overflow-hidden shadow-md h-full">
@@ -223,12 +223,12 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <p className="text-lg font-medium">Visit us at our location</p>
-                    <p className="text-gray-600">123 Main Street, Anytown, ST 12345</p>
+                    <p className="text-gray-600">15 KN 4 Ave, Downtown Kigali, Rwanda</p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="lg:w-1/2">
               <div className="bg-gray-50 rounded-lg p-6 h-full">
                 <h3 className="text-xl font-bold mb-4">Visit Our Store</h3>
@@ -238,7 +238,7 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span>123 Main Street, Anytown, ST 12345</span>
+                    <span>15 KN 4 Ave, Downtown Kigali, Rwanda</span>
                   </p>
                   <p className="flex items-start mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-1 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,7 +253,7 @@ export default function Home() {
                     <span>info@discountmart.com</span>
                   </p>
                 </div>
-                
+
                 <h4 className="font-bold mb-2">Store Hours:</h4>
                 <ul className="mb-6">
                   <li className="flex justify-between mb-1">
@@ -269,12 +269,12 @@ export default function Home() {
                     <span>10:00 AM - 5:00 PM</span>
                   </li>
                 </ul>
-                
+
                 <h4 className="font-bold mb-2">Pickup Information:</h4>
                 <p className="text-gray-700 mb-4">
                   Orders are typically ready for pickup within 24 hours. You'll receive an email notification when your order is ready.
                 </p>
-                
+
                 <Button className="inline-block bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-primary/90 transition">
                   Get Directions
                 </Button>

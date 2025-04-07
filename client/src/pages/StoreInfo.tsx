@@ -6,7 +6,7 @@ export default function StoreInfo() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Visit Our Store</h1>
-      
+
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/2">
           <div className="rounded-lg overflow-hidden shadow-md h-full">
@@ -19,12 +19,12 @@ export default function StoreInfo() {
             </div>
           </div>
         </div>
-        
+
         <div className="lg:w-1/2">
           <Card>
             <CardContent className="pt-6">
               <h2 className="text-xl font-bold mb-6">Contact Information</h2>
-              
+
               <div className="space-y-4 mb-6">
                 <div className="flex items-start">
                   <div className="bg-primary/10 p-2 rounded-full mr-3">
@@ -35,7 +35,7 @@ export default function StoreInfo() {
                     <p>15 KN 4 Ave, Downtown Kigali, Rwanda</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="bg-primary/10 p-2 rounded-full mr-3">
                     <Phone className="h-5 w-5 text-primary" />
@@ -45,7 +45,7 @@ export default function StoreInfo() {
                     <p>+250 788 123 456</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="bg-primary/10 p-2 rounded-full mr-3">
                     <Mail className="h-5 w-5 text-primary" />
@@ -56,7 +56,7 @@ export default function StoreInfo() {
                   </div>
                 </div>
               </div>
-              
+
               <h2 className="text-xl font-bold mb-4">Store Hours</h2>
               <div className="flex items-start mb-4">
                 <div className="bg-primary/10 p-2 rounded-full mr-3">
@@ -66,37 +66,37 @@ export default function StoreInfo() {
                   <div className="grid grid-cols-2 gap-2">
                     <p>Monday - Friday:</p>
                     <p>9:00 AM - 8:00 PM</p>
-                    
+
                     <p>Saturday:</p>
                     <p>9:00 AM - 6:00 PM</p>
-                    
+
                     <p>Sunday:</p>
                     <p>10:00 AM - 5:00 PM</p>
                   </div>
                 </div>
               </div>
-              
+
               <h2 className="text-xl font-bold mb-4">Pickup Information</h2>
               <p className="mb-4">
                 When you place an order through our website, we'll prepare your items for pickup at our store. Here's what you need to know:
               </p>
-              
+
               <ul className="list-disc pl-5 mb-6 space-y-2">
                 <li>Orders are typically ready for pickup within 24 hours</li>
                 <li>You'll receive an email notification when your order is ready</li>
                 <li>Bring a photo ID and your order confirmation when picking up</li>
                 <li>Orders not picked up within 7 days may be canceled</li>
               </ul>
-              
+
               <Button className="w-full">Get Directions</Button>
             </CardContent>
           </Card>
         </div>
       </div>
-      
+
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
-        
+
         <div className="max-w-3xl mx-auto space-y-4">
           <Card>
             <CardContent className="pt-6">
@@ -106,7 +106,7 @@ export default function StoreInfo() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-bold mb-2">Can I modify my order after it's been placed?</h3>
@@ -115,7 +115,7 @@ export default function StoreInfo() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-bold mb-2">What is your return policy?</h3>
@@ -124,7 +124,7 @@ export default function StoreInfo() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-bold mb-2">Do you offer delivery?</h3>
