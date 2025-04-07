@@ -44,7 +44,7 @@ export default function Contact() {
                 <Phone className="h-5 w-5 mr-3 text-primary" />
                 <div>
                   <p className="font-medium">Phone:</p>
-                  <p>+250 788 123 456</p>
+                  <p>+(250)780152723</p>
                 </div>
               </div>
               <div className="flex items-center">
