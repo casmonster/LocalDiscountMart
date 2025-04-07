@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
+import { BrowserRouter, ScrollRestoration } from 'react-router-dom'; // Added ScrollRestoration
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -52,6 +53,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
+        <ScrollRestoration getKey={(location) => location.pathname} /> {/* Added ScrollRestoration */}
         <WishlistProvider>
           <RecentlyViewedProvider>
             <Router />

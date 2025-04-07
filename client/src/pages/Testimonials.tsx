@@ -7,19 +7,22 @@ export default function Testimonials() {
       name: "Sarah Johnson",
       role: "Regular Customer",
       content: "The quality of products and customer service is exceptional. I love the convenient store pickup option!",
-      rating: 5
+      rating: 5,
+      imageUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&auto=format&fit=crop"
     },
     {
       name: "Mike Chen",
       role: "Verified Buyer",
       content: "Great prices and amazing selection. The kitchen collection is particularly impressive.",
-      rating: 5
+      rating: 5,
+      imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&auto=format&fit=crop"
     },
     {
       name: "Emily Parker",
       role: "Home Decorator",
       content: "Found beautiful home decor pieces at incredible discounts. Will definitely shop here again!",
-      rating: 5
+      rating: 5,
+      imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&auto=format&fit=crop"
     }
   ];
 
@@ -31,6 +34,11 @@ export default function Testimonials() {
           <Card key={index} className="p-6">
             <div className="flex flex-col h-full">
               <div className="flex items-center mb-4">
+                <img 
+                  src={testimonial.imageUrl} 
+                  alt={testimonial.name}
+                  className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-primary"
+                />
                 {Array(testimonial.rating).fill(0).map((_, i) => (
                   <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
