@@ -152,7 +152,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p className="text-xs text-gray-600">
-                  Items will be available for pickup at our store location. You'll receive an email when your order is ready.
+                  Items will be ready for pickup at our store location within one week. You'll receive an email when your order is ready.
                 </p>
               </div>
             </div>

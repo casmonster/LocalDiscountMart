@@ -18,7 +18,7 @@ import { formatRwandanFrancs, convertToRwandanFrancs } from "@/lib/currency";
 export default function OrderConfirmation({ params }: { params: { id: string } }) {
   const { id } = params;
   const [, navigate] = useLocation();
-  
+
   const { data: order, isLoading, error } = useQuery({
     queryKey: [`/api/orders/${id}`],
   });
@@ -133,9 +133,9 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
                   </div>
                 </div>
               ))}
-              
+
               <Separator className="my-3" />
-              
+
               <div className="flex justify-between font-bold">
                 <span>Total:</span>
                 <span className="text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(order.totalAmount))}</span>
@@ -148,8 +148,8 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
               <MapPin className="h-5 w-5 mr-1" /> Pickup Information
             </h3>
             <p className="text-sm mb-3">
-              Your order will be available for pickup at our store. You'll receive an email when it's ready.
-            </p>
+                Your order will be ready for pickup at our store within one week. We'll send you an email notification as soon as it's available.
+              </p>
             <div className="text-sm">
               <p className="font-medium">DiscountMart</p>
               <p>15 KN 4 Ave</p>

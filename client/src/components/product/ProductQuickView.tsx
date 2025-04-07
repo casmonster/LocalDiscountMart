@@ -271,7 +271,7 @@ export default function ProductQuickView({
                 <div>
                   <p className="font-medium text-gray-900">Available for Store Pickup</p>
                   <p className="text-gray-600 mt-1">
-                    This item can be picked up at our store location. You'll receive an email when your order is ready.
+                    This item will be ready for pickup within one week at our store location. You'll receive an email notification when it's ready.
                   </p>
                 </div>
               </div>
