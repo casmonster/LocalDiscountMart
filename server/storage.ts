@@ -326,7 +326,7 @@ export class MemStorage implements IStorage {
         name: "Premium Cooking Pot Set", 
         slug: "premium-cooking-pot-set", 
         description: "High-quality stainless steel cooking pot set for all your kitchen needs.", 
-        imageUrl: "https://images.pexels.com/photos/7040530/pexels-photo-7040530.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.pexels.com/photos/932267/pexels-photo-932267.jpeg?auto=compress&cs=tinysrgb&w=500", 
         price: 89.99, 
         discountPrice: 69.99, 
         categoryId: 3, 

@@ -92,7 +92,7 @@ export default function FeaturedProductShowcase({
             <Badge className="absolute top-4 right-4 bg-primary text-white">New</Badge>
           )}
           {product.discountPrice && (
-            <Badge className="absolute top-4 left-4 bg-secondary text-white">
+            <Badge className="absolute top-4 left-4 bg-red-500 text-white">
               {discountPercentage}% OFF
             </Badge>
           )}

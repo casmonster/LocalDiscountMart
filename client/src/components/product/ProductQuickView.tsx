@@ -128,7 +128,7 @@ export default function ProductQuickView({
               
               {/* Sale/New Badge */}
               {product.discountPrice && (
-                <div className="absolute top-3 left-3 bg-gradient-to-r from-secondary to-secondary/80 text-white text-xs font-bold px-2.5 py-1 rounded-md shadow-md flex items-center">
+                <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-400 text-white text-xs font-bold px-2.5 py-1 rounded-md shadow-md flex items-center">
                   <span>{discountPercentage}% OFF</span>
                 </div>
               )}
