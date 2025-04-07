@@ -1,17 +1,6 @@
 import { Link } from "wouter";
-import { useEffect } from "react";
-
-// Custom hook to maintain scroll position
-const usePreserveScroll = () => {
-  useEffect(() => {
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-  }, []);
-};
 
 export default function Footer() {
-  usePreserveScroll();
   return (
     <footer className="bg-gray-800 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
