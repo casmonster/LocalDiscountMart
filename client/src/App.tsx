@@ -15,12 +15,12 @@ import ProductDetail from "@/pages/ProductDetail";
 import Checkout from "@/pages/Checkout";
 import OrderConfirmation from "@/pages/OrderConfirmation";
 import StoreInfo from "@/pages/StoreInfo";
-
-// Create a Wishlist page component
 import Wishlist from "@/pages/Wishlist";
-
-// For the "New Arrivals" route
 import NewArrivals from "@/pages/NewArrivals";
+import About from "@/pages/About";
+import Contact from "@/pages/Contact";
+import PickupPolicy from "@/pages/PickupPolicy";
+
 
 function Router() {
   return (
@@ -37,6 +37,9 @@ function Router() {
           <Route path="/wishlist" component={Wishlist} />
           <Route path="/new-arrivals" component={NewArrivals} />
           <Route path="/clearance" component={() => <Category params={{ slug: 'clearance' }} />} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/pickup-policy" component={PickupPolicy} />
           <Route component={NotFound} />
         </Switch>
       </div>
