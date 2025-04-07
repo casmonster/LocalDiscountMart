@@ -23,6 +23,13 @@ import PickupPolicy from "@/pages/PickupPolicy";
 
 
 function Router() {
+  useEffect(() => {
+    // Prevent automatic scroll reset
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
