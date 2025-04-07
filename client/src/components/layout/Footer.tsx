@@ -48,6 +48,9 @@ export default function Footer() {
               <li><Link href="/store-info" className="text-gray-300 hover:text-white">Store Location</Link></li>
               <li><Link href="/pickup-policy" className="text-gray-300 hover:text-white">Pickup Policy</Link></li>
               <li><Link href="/return-policy" className="text-gray-300 hover:text-white">Return Policy</Link></li>
+              <li><Link href="/testimonials" className="text-gray-300 hover:text-white">Testimonials</Link></li>
+              <li><Link href="/shipping" className="text-gray-300 hover:text-white">Shipping Info</Link></li>
+              <li><Link href="/size-guide" className="text-gray-300 hover:text-white">Size Guide</Link></li>
             </ul>
           </div>
           
