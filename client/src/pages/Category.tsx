@@ -67,6 +67,12 @@ export default function Category({ params }: { params: { slug: string } }) {
 
   const { data: category, isLoading: categoryLoading } = useQuery({
     queryKey: [`/api/categories/${slug}`],
+    onSuccess: (data) => {
+      console.log("Category data loaded:", data);
+    },
+    onError: (error) => {
+      console.error("Error loading category:", error);
+    }
   });
 
   const { data: products, isLoading: productsLoading } = useQuery({
@@ -123,6 +129,7 @@ export default function Category({ params }: { params: { slug: string } }) {
   };
 
   const sortedProducts = getSortedProducts();
+  console.log("Sorted products:", sortedProducts);
 
   return (
     <div className="container mx-auto px-4 py-8">
