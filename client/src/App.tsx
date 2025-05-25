@@ -32,6 +32,7 @@ import NewArrivals from "@/pages/NewArrivals";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PickupPolicy from "@/pages/PickupPolicy";
+import Testimonials from "@/pages/Testimonials";
 
 
 function Router() {
@@ -53,6 +54,7 @@ function Router() {
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
           <Route path="/pickup-policy" component={PickupPolicy} />
+          <Route path="/testimonials" component={Testimonials} />
           <Route component={NotFound} />
         </Switch>
       </div>
