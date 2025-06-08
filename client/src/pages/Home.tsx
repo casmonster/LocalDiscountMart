@@ -7,19 +7,35 @@ import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Category, Product } from "@shared/schema";
 
 export default function Home() {
   const { lastViewedProduct } = useRecentlyViewed();
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    queryFn: async () => {
+      const response = await fetch("/api/categories");
+      if (!response.ok) throw new Error('Failed to fetch categories');
+      return response.json();
+    },
   });
 
-  const { data: featuredProducts, isLoading: featuredLoading } = useQuery({
+  const { data: featuredProducts, isLoading: featuredLoading } = useQuery<Product[]>({
     queryKey: ["/api/products/featured"],
+    queryFn: async () => {
+      const response = await fetch("/api/products/featured");
+      if (!response.ok) throw new Error('Failed to fetch featured products');
+      return response.json();
+    },
   });
 
-  const { data: newProducts, isLoading: newProductsLoading } = useQuery({
+  const { data: newProducts, isLoading: newProductsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products/new"],
+    queryFn: async () => {
+      const response = await fetch("/api/products/new");
+      if (!response.ok) throw new Error('Failed to fetch new products');
+      return response.json();
+    },
   });
 
   return (
