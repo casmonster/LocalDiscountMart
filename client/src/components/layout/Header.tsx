@@ -187,12 +187,15 @@ export default function Header() {
           </Link>
           <Link 
             href="/clearance"
-            className={`font-medium relative px-1 transition-colors ${location === '/clearance' 
-              ? 'text-primary' 
-              : 'text-gray-600 hover:text-primary'}`}
+            className={`font-bold relative px-3 py-1 transition-all duration-200 rounded-full ${location === '/clearance' 
+              ? 'bg-red-600 text-white shadow-lg' 
+              : 'bg-red-500 text-white hover:bg-red-600 hover:shadow-md'}`}
           >
-            <span className="text-secondary">Clearance</span>
-            {location === '/clearance' && <span className="absolute bottom-[-12px] left-0 w-full h-0.5 bg-secondary rounded-full"></span>}
+            <span className="relative z-10 flex items-center gap-1">
+              <span className="text-xs">🔥</span>
+              <span>CLEARANCE</span>
+            </span>
+            <span className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 rounded-full opacity-80"></span>
           </Link>
         </div>
       </nav>
