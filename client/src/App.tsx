@@ -29,6 +29,7 @@ import OrderConfirmation from "@/pages/OrderConfirmation";
 import StoreInfo from "@/pages/StoreInfo";
 import Wishlist from "@/pages/Wishlist";
 import NewArrivals from "@/pages/NewArrivals";
+import Clearance from "@/pages/Clearance";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PickupPolicy from "@/pages/PickupPolicy";
@@ -50,7 +51,7 @@ function Router() {
           <Route path="/store-info" component={StoreInfo} />
           <Route path="/wishlist" component={Wishlist} />
           <Route path="/new-arrivals" component={NewArrivals} />
-          <Route path="/clearance" component={() => <Category params={{ slug: 'clearance' }} />} />
+          <Route path="/clearance" component={Clearance} />
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
           <Route path="/pickup-policy" component={PickupPolicy} />

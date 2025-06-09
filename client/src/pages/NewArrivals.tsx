@@ -3,6 +3,7 @@ import { useState } from "react";
 import ProductCard from "@/components/product/ProductCard";
 import FeaturedProductShowcase from "@/components/product/FeaturedProductShowcase";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { 
   Select, 
   SelectContent, 
@@ -10,12 +11,18 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+import type { Product } from "@shared/schema";
 
 export default function NewArrivals() {
   const [sortBy, setSortBy] = useState<string>("default");
 
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products/new"],
+    queryFn: async () => {
+      const response = await fetch("/api/products/new");
+      if (!response.ok) throw new Error('Failed to fetch new products');
+      return response.json();
+    },
   });
 
   const getSortedProducts = () => {

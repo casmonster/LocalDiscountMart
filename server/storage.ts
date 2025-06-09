@@ -576,9 +576,17 @@ export class MemStorage implements IStorage {
       }
     ];
     
-    products.forEach(product => {
+    products.forEach(productData => {
       const id = this.currentProductId++;
-      this.products.set(id, { ...product, id });
+      const product: Product = { 
+        ...productData, 
+        id,
+        discountPrice: productData.discountPrice ?? null,
+        inStock: productData.inStock ?? true,
+        stockLevel: productData.stockLevel ?? "In Stock",
+        isNew: productData.isNew ?? false
+      };
+      this.products.set(id, product);
     });
   }
 }
