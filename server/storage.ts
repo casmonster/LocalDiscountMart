@@ -219,8 +219,8 @@ export class MemStorage implements IStorage {
     // Categories
     const categories: InsertCategory[] = [
       { name: "Clothing", slug: "clothing", imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
-      { name: "Tableware", slug: "tableware", imageUrl: "https://images.pexels.com/photos/1395325/pexels-photo-1395325.jpeg?auto=compress&cs=tinysrgb&w=500" },
-      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.pexels.com/photos/4969892/pexels-photo-4969892.jpeg?auto=compress&cs=tinysrgb&w=500" },
+      { name: "Tableware", slug: "tableware", imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.unsplash.com/photo-1556909196-f5f0efbca59c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
       { name: "Home Decor", slug: "home-decor", imageUrl: "https://images.unsplash.com/photo-1567016432779-094069958ea5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
     ];
     
@@ -480,7 +480,7 @@ export class MemStorage implements IStorage {
         name: "Electric Coffee Maker", 
         slug: "electric-coffee-maker", 
         description: "Programmable coffee maker for perfect morning brew.", 
-        imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1572119865084-43c285814d63?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 179.99, 
         discountPrice: null, 
         categoryId: 3, 

@@ -135,6 +135,45 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Clearance Banner */}
+      <section className="py-16 bg-gradient-to-r from-red-600 to-red-500 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 mb-6">
+              <span className="text-2xl">🔥</span>
+              <span className="font-bold text-lg">CLEARANCE SALE</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Up to 70% OFF
+            </h2>
+            <p className="text-xl mb-8 opacity-95 max-w-2xl mx-auto">
+              Massive discounts on quality clothing, tableware, kitchen items and home decor. 
+              Limited quantities available - don't miss out!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                href="/clearance" 
+                className="bg-white text-red-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors inline-flex items-center justify-center gap-2"
+              >
+                Shop Clearance Now
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+              <Link 
+                href="/new-arrivals" 
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-red-600 transition-colors inline-flex items-center justify-center gap-2"
+              >
+                View New Arrivals
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-24 -translate-x-24"></div>
+      </section>
+
       {/* Promo Section */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
