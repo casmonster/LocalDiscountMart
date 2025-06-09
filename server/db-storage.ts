@@ -1,236 +1,198 @@
-import {
-  categories, Category, InsertCategory,
-  products, Product, InsertProduct,
-  cartItems, CartItem, InsertCartItem,
-  orders, Order, InsertOrder,
-  orderItems, OrderItem, InsertOrderItem
+import { db } from "./db";
+import { 
+  categories, 
+  products, 
+  cartItems, 
+  orders, 
+  orderItems,
+  type Category,
+  type Product,
+  type CartItem,
+  type Order,
+  type OrderItem,
+  type InsertCategory,
+  type InsertProduct,
+  type InsertCartItem,
+  type InsertOrder,
+  type InsertOrderItem
 } from "@shared/schema";
+import { eq, like, desc, asc } from "drizzle-orm";
+import { IStorage } from "./storage";
 
-export interface IStorage {
-  // Categories
-  getCategories(): Promise<Category[]>;
-  getCategoryBySlug(slug: string): Promise<Category | undefined>;
-  
-  // Products
-  getProducts(): Promise<Product[]>;
-  getProductsByCategory(categoryId: number): Promise<Product[]>;
-  getProductBySlug(slug: string): Promise<Product | undefined>;
-  searchProducts(query: string): Promise<Product[]>;
-  getFeaturedProducts(): Promise<Product[]>;
-  getNewProducts(): Promise<Product[]>;
-  
-  // Cart
-  getCartItems(cartId: string): Promise<(CartItem & { product: Product })[]>;
-  addCartItem(item: InsertCartItem): Promise<CartItem>;
-  updateCartItemQuantity(id: number, quantity: number): Promise<CartItem | undefined>;
-  removeCartItem(id: number): Promise<void>;
-  clearCart(cartId: string): Promise<void>;
-  
-  // Orders
-  createOrder(order: InsertOrder, items: InsertOrderItem[]): Promise<Order>;
-  getOrder(id: number): Promise<(Order & { items: (OrderItem & { product: Product })[] }) | undefined>;
-}
-
-export class MemStorage implements IStorage {
-  private categories: Map<number, Category>;
-  private products: Map<number, Product>;
-  private cartItems: Map<number, CartItem>;
-  private orders: Map<number, Order>;
-  private orderItems: Map<number, OrderItem>;
-  
-  private currentCategoryId: number;
-  private currentProductId: number;
-  private currentCartItemId: number;
-  private currentOrderId: number;
-  private currentOrderItemId: number;
-
+export class DatabaseStorage implements IStorage {
   constructor() {
-    this.categories = new Map();
-    this.products = new Map();
-    this.cartItems = new Map();
-    this.orders = new Map();
-    this.orderItems = new Map();
-    
-    this.currentCategoryId = 1;
-    this.currentProductId = 1;
-    this.currentCartItemId = 1;
-    this.currentOrderId = 1;
-    this.currentOrderItemId = 1;
-    
-    // Initialize with sample data
     this.initSampleData();
   }
 
   // Categories
   async getCategories(): Promise<Category[]> {
-    return Array.from(this.categories.values());
+    return await db.select().from(categories);
   }
 
   async getCategoryBySlug(slug: string): Promise<Category | undefined> {
-    return Array.from(this.categories.values()).find(
-      (category) => category.slug === slug
-    );
+    const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
+    return category || undefined;
   }
 
   // Products
   async getProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
+    return await db.select().from(products);
   }
 
   async getProductsByCategory(categoryId: number): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.categoryId === categoryId
-    );
+    return await db.select().from(products).where(eq(products.categoryId, categoryId));
   }
 
   async getProductBySlug(slug: string): Promise<Product | undefined> {
-    return Array.from(this.products.values()).find(
-      (product) => product.slug === slug
-    );
+    const [product] = await db.select().from(products).where(eq(products.slug, slug));
+    return product || undefined;
   }
 
   async searchProducts(query: string): Promise<Product[]> {
-    const lowercaseQuery = query.toLowerCase();
-    return Array.from(this.products.values()).filter(
-      (product) => 
-        product.name.toLowerCase().includes(lowercaseQuery) ||
-        product.description.toLowerCase().includes(lowercaseQuery)
-    );
+    return await db.select().from(products).where(like(products.name, `%${query}%`));
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.discountPrice !== null
-    ).slice(0, 8);
+    // Return products with discounts as featured
+    return await db.select().from(products).where(eq(products.inStock, true)).limit(8);
   }
 
   async getNewProducts(): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      (product) => product.isNew
-    ).slice(0, 8);
+    return await db.select().from(products).where(eq(products.isNew, true));
   }
 
   // Cart
   async getCartItems(cartId: string): Promise<(CartItem & { product: Product })[]> {
-    const cartItems = Array.from(this.cartItems.values()).filter(
-      (item) => item.cartId === cartId
-    );
-    
-    return cartItems.map(item => {
-      const product = this.products.get(item.productId);
-      if (!product) {
-        throw new Error(`Product with ID ${item.productId} not found`);
-      }
-      return { ...item, product };
-    });
+    const items = await db
+      .select({
+        id: cartItems.id,
+        cartId: cartItems.cartId,
+        productId: cartItems.productId,
+        quantity: cartItems.quantity,
+        product: products
+      })
+      .from(cartItems)
+      .innerJoin(products, eq(cartItems.productId, products.id))
+      .where(eq(cartItems.cartId, cartId));
+
+    return items.map(item => ({
+      id: item.id,
+      cartId: item.cartId,
+      productId: item.productId,
+      quantity: item.quantity,
+      product: item.product
+    }));
   }
 
   async addCartItem(item: InsertCartItem): Promise<CartItem> {
-    // Check if product exists
-    const product = this.products.get(item.productId);
-    if (!product) {
-      throw new Error(`Product with ID ${item.productId} not found`);
-    }
-    
     // Check if item already exists in cart
-    const existingCartItem = Array.from(this.cartItems.values()).find(
-      (cartItem) => cartItem.cartId === item.cartId && cartItem.productId === item.productId
-    );
-    
-    if (existingCartItem) {
+    const [existingItem] = await db
+      .select()
+      .from(cartItems)
+      .where(
+        eq(cartItems.cartId, item.cartId)
+      )
+      .where(eq(cartItems.productId, item.productId));
+
+    if (existingItem) {
       // Update quantity
-      existingCartItem.quantity += (item.quantity || 1);
-      this.cartItems.set(existingCartItem.id, existingCartItem);
-      return existingCartItem;
+      const [updatedItem] = await db
+        .update(cartItems)
+        .set({ quantity: existingItem.quantity + (item.quantity || 1) })
+        .where(eq(cartItems.id, existingItem.id))
+        .returning();
+      return updatedItem;
     } else {
       // Add new item
-      const id = this.currentCartItemId++;
-      const newItem: CartItem = { ...item, id, quantity: item.quantity || 1 };
-      this.cartItems.set(id, newItem);
+      const [newItem] = await db
+        .insert(cartItems)
+        .values({ ...item, quantity: item.quantity || 1 })
+        .returning();
       return newItem;
     }
   }
 
   async updateCartItemQuantity(id: number, quantity: number): Promise<CartItem | undefined> {
-    const cartItem = this.cartItems.get(id);
-    if (!cartItem) {
-      return undefined;
-    }
-    
-    cartItem.quantity = quantity;
-    this.cartItems.set(id, cartItem);
-    return cartItem;
+    const [updatedItem] = await db
+      .update(cartItems)
+      .set({ quantity })
+      .where(eq(cartItems.id, id))
+      .returning();
+    return updatedItem || undefined;
   }
 
   async removeCartItem(id: number): Promise<void> {
-    this.cartItems.delete(id);
+    await db.delete(cartItems).where(eq(cartItems.id, id));
   }
 
   async clearCart(cartId: string): Promise<void> {
-    const cartItemIds = Array.from(this.cartItems.values())
-      .filter(item => item.cartId === cartId)
-      .map(item => item.id);
-      
-    cartItemIds.forEach(id => this.cartItems.delete(id));
+    await db.delete(cartItems).where(eq(cartItems.cartId, cartId));
   }
 
   // Orders
   async createOrder(insertOrder: InsertOrder, insertItems: InsertOrderItem[]): Promise<Order> {
-    const orderId = this.currentOrderId++;
-    const order: Order = { 
-      ...insertOrder, 
-      id: orderId, 
-      createdAt: new Date(),
-      status: insertOrder.status || 'pending'
-    };
-    this.orders.set(orderId, order);
-    
+    const [order] = await db
+      .insert(orders)
+      .values({ ...insertOrder, status: insertOrder.status || 'pending' })
+      .returning();
+
     // Add order items
-    insertItems.forEach(item => {
-      const orderItemId = this.currentOrderItemId++;
-      const orderItem: OrderItem = { ...item, id: orderItemId, orderId };
-      this.orderItems.set(orderItemId, orderItem);
-    });
-    
+    for (const item of insertItems) {
+      await db.insert(orderItems).values({ ...item, orderId: order.id });
+    }
+
     return order;
   }
 
   async getOrder(id: number): Promise<(Order & { items: (OrderItem & { product: Product })[] }) | undefined> {
-    const order = this.orders.get(id);
-    if (!order) {
-      return undefined;
-    }
-    
-    const orderItems = Array.from(this.orderItems.values())
-      .filter(item => item.orderId === id)
-      .map(item => {
-        const product = this.products.get(item.productId);
-        if (!product) {
-          throw new Error(`Product with ID ${item.productId} not found`);
-        }
-        return { ...item, product };
-      });
-    
-    return { ...order, items: orderItems };
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    if (!order) return undefined;
+
+    const items = await db
+      .select({
+        id: orderItems.id,
+        orderId: orderItems.orderId,
+        productId: orderItems.productId,
+        quantity: orderItems.quantity,
+        price: orderItems.price,
+        product: products
+      })
+      .from(orderItems)
+      .innerJoin(products, eq(orderItems.productId, products.id))
+      .where(eq(orderItems.orderId, id));
+
+    return {
+      ...order,
+      items: items.map(item => ({
+        id: item.id,
+        orderId: item.orderId,
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+        product: item.product
+      }))
+    };
   }
 
-  // Initialize sample data
-  private initSampleData() {
-    // Categories
-    const categories: InsertCategory[] = [
+  private async initSampleData() {
+    // Check if data already exists
+    const existingCategories = await db.select().from(categories).limit(1);
+    if (existingCategories.length > 0) {
+      return; // Data already exists
+    }
+
+    // Insert categories
+    const sampleCategories: InsertCategory[] = [
       { name: "Clothing", slug: "clothing", imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
       { name: "Tableware", slug: "tableware", imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
       { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
       { name: "Home Decor", slug: "home-decor", imageUrl: "https://images.unsplash.com/photo-1567016432779-094069958ea5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
     ];
-    
-    categories.forEach(category => {
-      const id = this.currentCategoryId++;
-      this.categories.set(id, { ...category, id });
-    });
-    
-    // Products
-    const products: InsertProduct[] = [
+
+    await db.insert(categories).values(sampleCategories);
+
+    // Insert products
+    const sampleProducts: InsertProduct[] = [
       // Clothing Category (ID: 1) - 8 products
       { 
         name: "Blue Linen Shirt", 
@@ -272,7 +234,7 @@ export class MemStorage implements IStorage {
         name: "Denim Jacket", 
         slug: "denim-jacket", 
         description: "Classic denim jacket for a timeless casual look.", 
-        imageUrl: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 79.99, 
         discountPrice: 59.99, 
         categoryId: 1, 
@@ -284,7 +246,7 @@ export class MemStorage implements IStorage {
         name: "Cotton T-Shirt", 
         slug: "cotton-t-shirt", 
         description: "Premium cotton t-shirt for everyday comfort.", 
-        imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 24.99, 
         discountPrice: null, 
         categoryId: 1, 
@@ -308,7 +270,7 @@ export class MemStorage implements IStorage {
         name: "Casual Pants", 
         slug: "casual-pants", 
         description: "Comfortable casual pants for relaxed style.", 
-        imageUrl: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 64.99, 
         discountPrice: 49.99, 
         categoryId: 1, 
@@ -358,7 +320,7 @@ export class MemStorage implements IStorage {
         name: "Porcelain Tea Set", 
         slug: "porcelain-tea-set", 
         description: "Fine porcelain tea set with elegant floral design.", 
-        imageUrl: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 79.99, 
         discountPrice: 59.99, 
         categoryId: 2, 
@@ -370,7 +332,7 @@ export class MemStorage implements IStorage {
         name: "Stainless Steel Cutlery Set", 
         slug: "stainless-steel-cutlery", 
         description: "Professional-grade stainless steel cutlery set.", 
-        imageUrl: "https://images.pexels.com/photos/175765/pexels-photo-175765.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=500", 
         price: 89.99, 
         discountPrice: 69.99, 
         categoryId: 2, 
@@ -394,7 +356,7 @@ export class MemStorage implements IStorage {
         name: "Wine Glass Collection", 
         slug: "wine-glass-collection", 
         description: "Professional wine glass collection for connoisseurs.", 
-        imageUrl: "https://images.pexels.com/photos/12268571/pexels-photo-12268571.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1586370434639-0fe43b2d32d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 54.99, 
         discountPrice: 39.99, 
         categoryId: 2, 
@@ -408,7 +370,7 @@ export class MemStorage implements IStorage {
         name: "Premium Cooking Pot Set", 
         slug: "premium-cooking-pot-set", 
         description: "High-quality stainless steel cooking pot set for all your kitchen needs.", 
-        imageUrl: "https://images.pexels.com/photos/6874235/pexels-photo-6874235.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.pexels.com/photos/932267/pexels-photo-932267.jpeg?auto=compress&cs=tinysrgb&w=500", 
         price: 89.99, 
         discountPrice: 69.99, 
         categoryId: 3, 
@@ -444,7 +406,7 @@ export class MemStorage implements IStorage {
         name: "Non-Stick Pan Set", 
         slug: "non-stick-pan-set", 
         description: "Professional non-stick pan set for perfect cooking.", 
-        imageUrl: "https://images.pexels.com/photos/7719169/pexels-photo-7719169.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1556909196-f5f0efbca59c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 119.99, 
         discountPrice: 89.99, 
         categoryId: 3, 
@@ -468,7 +430,7 @@ export class MemStorage implements IStorage {
         name: "Wooden Cutting Board", 
         slug: "wooden-cutting-board", 
         description: "Large bamboo cutting board with groove design.", 
-        imageUrl: "https://images.pexels.com/photos/32445973/pexels-photo-32445973.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 29.99, 
         discountPrice: 19.99, 
         categoryId: 3, 
@@ -480,7 +442,7 @@ export class MemStorage implements IStorage {
         name: "Electric Coffee Maker", 
         slug: "electric-coffee-maker", 
         description: "Programmable coffee maker for perfect morning brew.", 
-        imageUrl: "https://images.pexels.com/photos/30689451/pexels-photo-30689451.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.pexels.com/photos/4226804/pexels-photo-4226804.jpeg?auto=compress&cs=tinysrgb&w=500", 
         price: 179.99, 
         discountPrice: null, 
         categoryId: 3, 
@@ -494,7 +456,7 @@ export class MemStorage implements IStorage {
         name: "Modern Lamp", 
         slug: "modern-lamp", 
         description: "Stylish modern lamp to light up your living space.", 
-        imageUrl: "https://images.pexels.com/photos/6970077/pexels-photo-6970077.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1507878866276-a947ef722fee?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 49.99, 
         discountPrice: 24.99, 
         categoryId: 4, 
@@ -506,7 +468,7 @@ export class MemStorage implements IStorage {
         name: "Ceramic Vase Set", 
         slug: "ceramic-vase-set", 
         description: "Beautiful ceramic vase set for your home decor.", 
-        imageUrl: "https://images.pexels.com/photos/8989514/pexels-photo-8989514.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 34.99, 
         discountPrice: null, 
         categoryId: 4, 
@@ -518,7 +480,7 @@ export class MemStorage implements IStorage {
         name: "Cotton Throw Blanket", 
         slug: "cotton-throw-blanket", 
         description: "Soft cotton throw blanket for your cozy evenings.", 
-        imageUrl: "https://images.pexels.com/photos/8526713/pexels-photo-8526713.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1517705008128-361805f42e86?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 24.99, 
         discountPrice: null, 
         categoryId: 4, 
@@ -530,7 +492,7 @@ export class MemStorage implements IStorage {
         name: "Wall Art Canvas Set", 
         slug: "wall-art-canvas-set", 
         description: "Modern abstract wall art canvas set of three pieces.", 
-        imageUrl: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 89.99, 
         discountPrice: 69.99, 
         categoryId: 4, 
@@ -542,7 +504,7 @@ export class MemStorage implements IStorage {
         name: "Decorative Mirror", 
         slug: "decorative-mirror", 
         description: "Round decorative mirror with golden frame.", 
-        imageUrl: "https://images.pexels.com/photos/2203743/pexels-photo-2203743.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 79.99, 
         discountPrice: 59.99, 
         categoryId: 4, 
@@ -554,7 +516,7 @@ export class MemStorage implements IStorage {
         name: "Scented Candle Set", 
         slug: "scented-candle-set", 
         description: "Luxury scented candle set with relaxing fragrances.", 
-        imageUrl: "https://images.pexels.com/photos/20419182/pexels-photo-20419182.jpeg?auto=compress&cs=tinysrgb&w=600", 
+        imageUrl: "https://images.unsplash.com/photo-1602881915976-8ad28ed8e75e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 44.99, 
         discountPrice: null, 
         categoryId: 4, 
@@ -566,7 +528,7 @@ export class MemStorage implements IStorage {
         name: "Indoor Plant Collection", 
         slug: "indoor-plant-collection", 
         description: "Set of three low-maintenance indoor plants with pots.", 
-        imageUrl: "https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=500", 
+        imageUrl: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 54.99, 
         discountPrice: null, 
         categoryId: 4, 
@@ -575,22 +537,7 @@ export class MemStorage implements IStorage {
         isNew: true
       }
     ];
-    
-    products.forEach(productData => {
-      const id = this.currentProductId++;
-      const product: Product = { 
-        ...productData, 
-        id,
-        discountPrice: productData.discountPrice ?? null,
-        inStock: productData.inStock ?? true,
-        stockLevel: productData.stockLevel ?? "In Stock",
-        isNew: productData.isNew ?? false
-      };
-      this.products.set(id, product);
-    });
+
+    await db.insert(products).values(sampleProducts);
   }
 }
-
-import { DatabaseStorage } from "./db-storage";
-
-export const storage = new DatabaseStorage();
