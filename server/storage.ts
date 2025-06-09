@@ -139,13 +139,13 @@ export class MemStorage implements IStorage {
     
     if (existingCartItem) {
       // Update quantity
-      existingCartItem.quantity += item.quantity;
+      existingCartItem.quantity += (item.quantity || 1);
       this.cartItems.set(existingCartItem.id, existingCartItem);
       return existingCartItem;
     } else {
       // Add new item
       const id = this.currentCartItemId++;
-      const newItem: CartItem = { ...item, id };
+      const newItem: CartItem = { ...item, id, quantity: item.quantity || 1 };
       this.cartItems.set(id, newItem);
       return newItem;
     }
@@ -177,7 +177,12 @@ export class MemStorage implements IStorage {
   // Orders
   async createOrder(insertOrder: InsertOrder, insertItems: InsertOrderItem[]): Promise<Order> {
     const orderId = this.currentOrderId++;
-    const order: Order = { ...insertOrder, id: orderId, createdAt: new Date() };
+    const order: Order = { 
+      ...insertOrder, 
+      id: orderId, 
+      createdAt: new Date(),
+      status: insertOrder.status || 'pending'
+    };
     this.orders.set(orderId, order);
     
     // Add order items
@@ -226,6 +231,7 @@ export class MemStorage implements IStorage {
     
     // Products
     const products: InsertProduct[] = [
+      // Clothing Category (ID: 1) - 8 products
       { 
         name: "Blue Linen Shirt", 
         slug: "blue-linen-shirt", 
@@ -234,18 +240,6 @@ export class MemStorage implements IStorage {
         price: 49.99, 
         discountPrice: 29.99, 
         categoryId: 1, 
-        inStock: true,
-        stockLevel: "In Stock",
-        isNew: false
-      },
-      { 
-        name: "Ceramic Dinner Set", 
-        slug: "ceramic-dinner-set", 
-        description: "Elegant ceramic dinner set for a family of four.", 
-        imageUrl: "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
-        price: 59.99, 
-        discountPrice: 44.99, 
-        categoryId: 2, 
         inStock: true,
         stockLevel: "In Stock",
         isNew: false
@@ -263,30 +257,6 @@ export class MemStorage implements IStorage {
         isNew: false
       },
       { 
-        name: "Modern Lamp", 
-        slug: "modern-lamp", 
-        description: "Stylish modern lamp to light up your living space.", 
-        imageUrl: "https://images.unsplash.com/photo-1507878866276-a947ef722fee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
-        price: 49.99, 
-        discountPrice: 24.99, 
-        categoryId: 4, 
-        inStock: true,
-        stockLevel: "In Stock",
-        isNew: false
-      },
-      { 
-        name: "Ceramic Vase Set", 
-        slug: "ceramic-vase-set", 
-        description: "Beautiful ceramic vase set for your home decor.", 
-        imageUrl: "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
-        price: 34.99, 
-        discountPrice: null, 
-        categoryId: 4, 
-        inStock: true,
-        stockLevel: "In Stock",
-        isNew: true
-      },
-      { 
         name: "Wool Scarf", 
         slug: "wool-scarf", 
         description: "Soft wool scarf to keep you warm during the winter.", 
@@ -297,6 +267,80 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true
+      },
+      { 
+        name: "Denim Jacket", 
+        slug: "denim-jacket", 
+        description: "Classic denim jacket for a timeless casual look.", 
+        imageUrl: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 79.99, 
+        discountPrice: 59.99, 
+        categoryId: 1, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Cotton T-Shirt", 
+        slug: "cotton-t-shirt", 
+        description: "Premium cotton t-shirt for everyday comfort.", 
+        imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 24.99, 
+        discountPrice: null, 
+        categoryId: 1, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Leather Belt", 
+        slug: "leather-belt", 
+        description: "Genuine leather belt with classic buckle design.", 
+        imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 39.99, 
+        discountPrice: 29.99, 
+        categoryId: 1, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Casual Pants", 
+        slug: "casual-pants", 
+        description: "Comfortable casual pants for relaxed style.", 
+        imageUrl: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 64.99, 
+        discountPrice: 49.99, 
+        categoryId: 1, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Winter Coat", 
+        slug: "winter-coat", 
+        description: "Warm winter coat for cold weather protection.", 
+        imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 129.99, 
+        discountPrice: null, 
+        categoryId: 1, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+
+      // Tableware Category (ID: 2) - 6 products
+      { 
+        name: "Ceramic Dinner Set", 
+        slug: "ceramic-dinner-set", 
+        description: "Elegant ceramic dinner set for a family of four.", 
+        imageUrl: "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 59.99, 
+        discountPrice: 44.99, 
+        categoryId: 2, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
       },
       { 
         name: "Crystal Glass Set", 
@@ -311,17 +355,55 @@ export class MemStorage implements IStorage {
         isNew: true
       },
       { 
-        name: "Cotton Throw Blanket", 
-        slug: "cotton-throw-blanket", 
-        description: "Soft cotton throw blanket for your cozy evenings.", 
-        imageUrl: "https://images.unsplash.com/photo-1517705008128-361805f42e86?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
-        price: 24.99, 
+        name: "Porcelain Tea Set", 
+        slug: "porcelain-tea-set", 
+        description: "Fine porcelain tea set with elegant floral design.", 
+        imageUrl: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 79.99, 
+        discountPrice: 59.99, 
+        categoryId: 2, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Stainless Steel Cutlery Set", 
+        slug: "stainless-steel-cutlery", 
+        description: "Professional-grade stainless steel cutlery set.", 
+        imageUrl: "https://images.unsplash.com/photo-1578928913940-b7e3d78c3293?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 89.99, 
+        discountPrice: 69.99, 
+        categoryId: 2, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Bamboo Serving Tray", 
+        slug: "bamboo-serving-tray", 
+        description: "Eco-friendly bamboo serving tray for entertaining.", 
+        imageUrl: "https://images.unsplash.com/photo-1591022373626-2c90e3c2952a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 34.99, 
         discountPrice: null, 
-        categoryId: 4, 
+        categoryId: 2, 
         inStock: true,
         stockLevel: "In Stock",
         isNew: true
       },
+      { 
+        name: "Wine Glass Collection", 
+        slug: "wine-glass-collection", 
+        description: "Professional wine glass collection for connoisseurs.", 
+        imageUrl: "https://images.unsplash.com/photo-1586370434639-0fe43b2d32d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 54.99, 
+        discountPrice: 39.99, 
+        categoryId: 2, 
+        inStock: true,
+        stockLevel: "Low Stock",
+        isNew: false
+      },
+
+      // Kitchen Category (ID: 3) - 7 products
       { 
         name: "Premium Cooking Pot Set", 
         slug: "premium-cooking-pot-set", 
@@ -357,6 +439,140 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "Low Stock",
         isNew: false
+      },
+      { 
+        name: "Non-Stick Pan Set", 
+        slug: "non-stick-pan-set", 
+        description: "Professional non-stick pan set for perfect cooking.", 
+        imageUrl: "https://images.unsplash.com/photo-1556909196-f5f0efbca59c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 119.99, 
+        discountPrice: 89.99, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Kitchen Knife Set", 
+        slug: "kitchen-knife-set", 
+        description: "Professional chef knife set with wooden block.", 
+        imageUrl: "https://images.unsplash.com/photo-1616742547358-9b6a9b0b9b6b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 149.99, 
+        discountPrice: null, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Wooden Cutting Board", 
+        slug: "wooden-cutting-board", 
+        description: "Large bamboo cutting board with groove design.", 
+        imageUrl: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 29.99, 
+        discountPrice: 19.99, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Electric Coffee Maker", 
+        slug: "electric-coffee-maker", 
+        description: "Programmable coffee maker for perfect morning brew.", 
+        imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 179.99, 
+        discountPrice: null, 
+        categoryId: 3, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+
+      // Home Decor Category (ID: 4) - 7 products
+      { 
+        name: "Modern Lamp", 
+        slug: "modern-lamp", 
+        description: "Stylish modern lamp to light up your living space.", 
+        imageUrl: "https://images.unsplash.com/photo-1507878866276-a947ef722fee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 49.99, 
+        discountPrice: 24.99, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Ceramic Vase Set", 
+        slug: "ceramic-vase-set", 
+        description: "Beautiful ceramic vase set for your home decor.", 
+        imageUrl: "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 34.99, 
+        discountPrice: null, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Cotton Throw Blanket", 
+        slug: "cotton-throw-blanket", 
+        description: "Soft cotton throw blanket for your cozy evenings.", 
+        imageUrl: "https://images.unsplash.com/photo-1517705008128-361805f42e86?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 24.99, 
+        discountPrice: null, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Wall Art Canvas Set", 
+        slug: "wall-art-canvas-set", 
+        description: "Modern abstract wall art canvas set of three pieces.", 
+        imageUrl: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 89.99, 
+        discountPrice: 69.99, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Decorative Mirror", 
+        slug: "decorative-mirror", 
+        description: "Round decorative mirror with golden frame.", 
+        imageUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 79.99, 
+        discountPrice: 59.99, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: false
+      },
+      { 
+        name: "Scented Candle Set", 
+        slug: "scented-candle-set", 
+        description: "Luxury scented candle set with relaxing fragrances.", 
+        imageUrl: "https://images.unsplash.com/photo-1602881915976-8ad28ed8e75e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 44.99, 
+        discountPrice: null, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
+      },
+      { 
+        name: "Indoor Plant Collection", 
+        slug: "indoor-plant-collection", 
+        description: "Set of three low-maintenance indoor plants with pots.", 
+        imageUrl: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80", 
+        price: 54.99, 
+        discountPrice: null, 
+        categoryId: 4, 
+        inStock: true,
+        stockLevel: "In Stock",
+        isNew: true
       }
     ];
     
