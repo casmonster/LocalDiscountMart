@@ -220,7 +220,7 @@ export class MemStorage implements IStorage {
     const categories: InsertCategory[] = [
       { name: "Clothing", slug: "clothing", imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
       { name: "Tableware", slug: "tableware", imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
-      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+      { name: "Kitchen", slug: "kitchen", imageUrl: "https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
       { name: "Home Decor", slug: "home-decor", imageUrl: "https://images.unsplash.com/photo-1567016432779-094069958ea5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" },
     ];
     
@@ -370,7 +370,7 @@ export class MemStorage implements IStorage {
         name: "Stainless Steel Cutlery Set", 
         slug: "stainless-steel-cutlery", 
         description: "Professional-grade stainless steel cutlery set.", 
-        imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1610222939791-8e6f16a7ff23?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 89.99, 
         discountPrice: 69.99, 
         categoryId: 2, 
@@ -480,7 +480,7 @@ export class MemStorage implements IStorage {
         name: "Electric Coffee Maker", 
         slug: "electric-coffee-maker", 
         description: "Programmable coffee maker for perfect morning brew.", 
-        imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
+        imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80", 
         price: 179.99, 
         discountPrice: null, 
         categoryId: 3, 
