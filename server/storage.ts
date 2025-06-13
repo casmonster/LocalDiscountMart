@@ -554,7 +554,7 @@ export class MemStorage implements IStorage {
         name: "Scented Candle Set", 
         slug: "scented-candle-set", 
         description: "Luxury scented candle set with relaxing fragrances.", 
-        imageUrl: "https://images.pexels.com/photos/20419182/pexels-photo-20419182.jpeg?auto=compress&cs=tinysrgb&w=600", 
+        imageUrl: "https://images.pexels.com/photos/20419182/pexels-photo-20419182.jpeg?auto=compress&cs=tinysrgb&w=500", 
         price: 44.99, 
         discountPrice: null, 
         categoryId: 4, 
@@ -591,6 +591,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-import { DatabaseStorage } from "./db-storage";
-
-export const storage = new DatabaseStorage();
+export const storage = new MemStorage();

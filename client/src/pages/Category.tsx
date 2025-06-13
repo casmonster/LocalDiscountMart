@@ -65,13 +65,8 @@ export default function Category({ params }: { params: { slug: string } }) {
   const [, setLocation] = useLocation();
   const [sortBy, setSortBy] = useState<string>("default");
 
-  const { data: category, isLoading: categoryLoading } = useQuery<Category>({
+  const { data: category, isLoading: categoryLoading } = useQuery({
     queryKey: [`/api/categories/${slug}`],
-    queryFn: async () => {
-      const response = await fetch(`/api/categories/${slug}`);
-      if (!response.ok) throw new Error('Failed to fetch category');
-      return response.json();
-    },
     onSuccess: (data) => {
       console.log("Category data loaded:", data);
     },
@@ -80,14 +75,8 @@ export default function Category({ params }: { params: { slug: string } }) {
     }
   });
 
-  const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
+  const { data: products, isLoading: productsLoading } = useQuery({
     queryKey: [`/api/products/category/${category?.id}`],
-    queryFn: async () => {
-      if (!category?.id) return [];
-      const response = await fetch(`/api/products/category/${category.id}`);
-      if (!response.ok) throw new Error('Failed to fetch category products');
-      return response.json();
-    },
     enabled: !!category?.id,
     onSuccess: (data) => {
       console.log("Category products loaded:", {category: category?.slug, id: category?.id, count: data?.length, data});
