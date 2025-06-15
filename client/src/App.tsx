@@ -39,6 +39,9 @@ import OrderStatus from "@/pages/OrderStatus";
 import FAQ from "@/pages/FAQ";
 import HelpCenter from "@/pages/HelpCenter";
 import Newsletter from "@/pages/Newsletter";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
+import Sitemap from "@/pages/Sitemap";
 
 
 function Router() {
@@ -66,6 +69,9 @@ function Router() {
           <Route path="/faq" component={FAQ} />
           <Route path="/help" component={HelpCenter} />
           <Route path="/newsletter" component={Newsletter} />
+          <Route path="/privacy" component={PrivacyPolicy} />
+          <Route path="/terms" component={TermsOfService} />
+          <Route path="/sitemap" component={Sitemap} />
           <Route component={NotFound} />
         </Switch>
       </div>
