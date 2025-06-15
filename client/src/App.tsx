@@ -34,6 +34,11 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PickupPolicy from "@/pages/PickupPolicy";
 import Testimonials from "@/pages/Testimonials";
+import MyAccount from "@/pages/MyAccount";
+import OrderStatus from "@/pages/OrderStatus";
+import FAQ from "@/pages/FAQ";
+import HelpCenter from "@/pages/HelpCenter";
+import Newsletter from "@/pages/Newsletter";
 
 
 function Router() {
@@ -56,6 +61,11 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/pickup-policy" component={PickupPolicy} />
           <Route path="/testimonials" component={Testimonials} />
+          <Route path="/account" component={MyAccount} />
+          <Route path="/orders" component={OrderStatus} />
+          <Route path="/faq" component={FAQ} />
+          <Route path="/help" component={HelpCenter} />
+          <Route path="/newsletter" component={Newsletter} />
           <Route component={NotFound} />
         </Switch>
       </div>

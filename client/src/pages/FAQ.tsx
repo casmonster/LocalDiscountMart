@@ -172,7 +172,7 @@ export default function FAQ() {
                           ) : (
                             <ChevronDown className="h-5 w-5 text-gray-500" />
                           )}
-                        </CollapsibileTrigger>
+                        </CollapsibleTrigger>
                         <CollapsibleContent className="px-4 pb-4">
                           <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
                         </CollapsibleContent>
