@@ -481,7 +481,7 @@ export class MemStorage implements IStorage {
         categoryId: 3,
         inStock: true,
         stockLevel: "In Stock",
-        isNew: false,
+        isNew: false
       },
       {
         name: "Glass Drinkware Collection",
