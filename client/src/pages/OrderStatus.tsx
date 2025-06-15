@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatRwandanFrancs } from "@/lib/currency";
+import type { Order, OrderItem, Product } from "@shared/schema";
 
 export default function OrderStatus() {
   const [orderId, setOrderId] = useState("");
   const [searchOrderId, setSearchOrderId] = useState("");
 
-  const { data: order, isLoading, error } = useQuery({
+  const { data: order, isLoading, error } = useQuery<Order & { items: (OrderItem & { product: Product })[] }>({
     queryKey: [`/api/orders/${searchOrderId}`],
     enabled: !!searchOrderId && searchOrderId.length > 0
   });
@@ -134,11 +135,11 @@ export default function OrderStatus() {
                     <span>Order #{order.id}</span>
                   </CardTitle>
                   <CardDescription>
-                    Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
+                    Placed on {order.createdAt ? new Date(order.createdAt.toString()).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
-                    })}
+                    }) : 'Unknown date'}
                   </CardDescription>
                 </div>
                 <Badge className={getStatusColor(order.status)}>
@@ -168,7 +169,7 @@ export default function OrderStatus() {
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-4">Order Items</h4>
                   <div className="space-y-3 mb-4">
-                    {order.items.map((item: any) => (
+                    {order.items.map((item) => (
                       <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <img
