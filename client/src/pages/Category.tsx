@@ -65,25 +65,13 @@ export default function Category({ params }: { params: { slug: string } }) {
   const [, setLocation] = useLocation();
   const [sortBy, setSortBy] = useState<string>("default");
 
-  const { data: category, isLoading: categoryLoading } = useQuery({
-    queryKey: [`/api/categories/${slug}`],
-    onSuccess: (data) => {
-      console.log("Category data loaded:", data);
-    },
-    onError: (error) => {
-      console.error("Error loading category:", error);
-    }
+  const { data: category, isLoading: categoryLoading } = useQuery<Category>({
+    queryKey: [`/api/categories/${slug}`]
   });
 
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: [`/api/products/category/${category?.id}`],
-    enabled: !!category?.id,
-    onSuccess: (data) => {
-      console.log("Category products loaded:", {category: category?.slug, id: category?.id, count: data?.length, data});
-    },
-    onError: (error) => {
-      console.error("Error loading category products:", error);
-    }
+    enabled: !!category?.id
   });
 
   useEffect(() => {
