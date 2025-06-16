@@ -84,6 +84,9 @@ The deployment configuration supports autoscaling and includes proper port manag
 ```
 Changelog:
 - June 15, 2025. Initial setup
+- June 15, 2025. Fixed TypeScript errors in ProductDetail.tsx and OrderStatus.tsx by adding proper type imports and explicit queryFn functions
+- June 15, 2025. Created comprehensive customer service system with My Account, Order Status, FAQ, Help Center, and Newsletter pages
+- June 15, 2025. Added complete legal pages: Privacy Policy, Terms of Service, and Sitemap with authentic content for Rwanda business
 ```
 
 ## User Preferences

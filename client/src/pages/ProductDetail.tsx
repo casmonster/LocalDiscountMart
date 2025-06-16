@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, AlertCircle, Minus, Plus, Heart } from "lucide-react";
 import { convertToRwandanFrancs, formatRwandanFrancs } from "@/lib/currency";
+import type { Product } from "@shared/schema";
 
 export default function ProductDetail({ params }: { params: { slug: string } }) {
   const { slug } = params;
@@ -18,13 +19,23 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const { addToCart, isLoading: isCartLoading } = useCart();
   const { addToRecentlyViewed } = useRecentlyViewed();
 
-  const { data: product, isLoading } = useQuery({
+  const { data: product, isLoading } = useQuery<Product>({
     queryKey: [`/api/products/${slug}`],
+    queryFn: async () => {
+      const res = await fetch(`/api/products/${slug}`);
+      if (!res.ok) throw new Error('Product not found');
+      return res.json();
+    }
   });
 
-  const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
+  const { data: relatedProducts, isLoading: relatedLoading } = useQuery<Product[]>({
     queryKey: ["/api/products/category", product?.categoryId],
     enabled: !!product?.categoryId,
+    queryFn: async () => {
+      const res = await fetch(`/api/products/category/${product?.categoryId}`);
+      if (!res.ok) throw new Error('Related products not found');
+      return res.json();
+    }
   });
 
   // Add product to recently viewed when it loads
