@@ -214,15 +214,25 @@ function CartItem({ item, onRemove, onUpdateQuantity }: CartItemProps) {
         <div className="flex-grow">
           <h3 className="font-medium text-gray-800 pr-6">{item.product.name}</h3>
           
+          {/* Set information */}
+          {item.product.setPieces > 1 && (
+            <p className="text-xs text-gray-600 mt-0.5">
+              {item.product.setPieces} {item.product.unitType === "set" ? "pieces per set" : `${item.product.unitType}s included`}
+            </p>
+          )}
+          
           {/* Price display */}
           <div className="flex items-center mt-1">
             {hasDiscount ? (
               <>
-                <span className="text-blue-800 font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price))}</span>
-                <span className="text-gray-400 text-xs line-through ml-2">{formatRwandanFrancs(convertToRwandanFrancs(item.product.price))}</span>
+                <span className="text-blue-800 font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price * item.product.setPieces))}</span>
+                <span className="text-gray-400 text-xs line-through ml-2">{formatRwandanFrancs(convertToRwandanFrancs(item.product.price * item.product.setPieces))}</span>
               </>
             ) : (
-              <span className="text-blue-800 font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price))}</span>
+              <span className="text-blue-800 font-bold">{formatRwandanFrancs(convertToRwandanFrancs(price * item.product.setPieces))}</span>
+            )}
+            {item.product.setPieces > 1 && (
+              <span className="text-xs text-gray-500 ml-1">per {item.product.unitType}</span>
             )}
           </div>
           

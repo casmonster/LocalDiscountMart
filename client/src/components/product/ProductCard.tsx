@@ -231,16 +231,19 @@ export default function ProductCard({
                 {discountPrice ? (
                   <>
                     <span className="text-blue-800 font-bold mr-2 text-lg">
-                      {formatRwandanFrancs(convertToRwandanFrancs(discountPrice))}
+                      {formatRwandanFrancs(convertToRwandanFrancs(discountPrice * setPieces))}
                     </span>
                     <span className="text-gray-400 text-sm line-through">
-                      {formatRwandanFrancs(convertToRwandanFrancs(price))}
+                      {formatRwandanFrancs(convertToRwandanFrancs(price * setPieces))}
                     </span>
                   </>
                 ) : (
                   <span className="text-blue-800 font-bold mr-2 text-lg">
-                    {formatRwandanFrancs(convertToRwandanFrancs(price))}
+                    {formatRwandanFrancs(convertToRwandanFrancs(price * setPieces))}
                   </span>
+                )}
+                {setPieces > 1 && (
+                  <span className="text-xs text-gray-500">per {unitType}</span>
                 )}
               </div>
 
