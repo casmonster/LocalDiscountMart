@@ -171,6 +171,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Orders
   apiRouter.post("/orders", async (req: Request, res: Response) => {
     try {
+      console.log("Order request body:", JSON.stringify(req.body, null, 2));
+      
       const orderSchema = z.object({
         order: insertOrderSchema,
         items: z.array(insertOrderItemSchema)
