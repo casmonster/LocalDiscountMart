@@ -295,6 +295,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Knit Sweater",
@@ -308,6 +310,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "Low Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Wool Scarf",

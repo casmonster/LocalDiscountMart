@@ -27,6 +27,8 @@ export const products = pgTable("products", {
   inStock: boolean("in_stock").notNull().default(true),
   stockLevel: text("stock_level").notNull().default("In Stock"),
   isNew: boolean("is_new").notNull().default(false),
+  setPieces: integer("set_pieces").notNull().default(1), // Number of pieces per set
+  unitType: text("unit_type").notNull().default("piece"), // e.g., "piece", "pack", "box"
 });
 
 export const insertProductSchema = createInsertSchema(products).omit({

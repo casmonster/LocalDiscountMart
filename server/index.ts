@@ -61,23 +61,6 @@ app.use((req, res, next) => {
   // It is the only port that is not firewalled.
   const port = 5000;
   
-  server.on('error', (err: any) => {
-    if (err.code === 'EADDRINUSE') {
-      log(`Port ${port} is busy, retrying in 1 second...`);
-      setTimeout(() => {
-        server.close();
-        server.listen({
-          port,
-          host: "0.0.0.0"
-        }, () => {
-          log(`serving on port ${port}`);
-        });
-      }, 1000);
-    } else {
-      throw err;
-    }
-  });
-  
   server.listen({
     port,
     host: "0.0.0.0"
