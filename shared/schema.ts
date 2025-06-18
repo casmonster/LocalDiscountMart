@@ -33,6 +33,9 @@ export const products = pgTable("products", {
 
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
+}).extend({
+  setPieces: z.number().default(1),
+  unitType: z.string().default("piece"),
 });
 
 // Cart Item schema

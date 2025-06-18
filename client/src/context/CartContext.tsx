@@ -15,6 +15,8 @@ export type CartItemWithProduct = {
     discountPrice: number | null;
     imageUrl: string;
     stockLevel: string;
+    setPieces: number;
+    unitType: string;
   };
 };
 
@@ -164,12 +166,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => {
       const price = item.product.discountPrice || item.product.price;
-      return total + price * item.quantity;
+      const setPieces = item.product.setPieces || 1;
+      return total + (price * setPieces * item.quantity);
     }, 0);
   };
 
   const getTaxAmount = () => {
-    return getCartTotal() * 0.08; // 8% tax
+    return getCartTotal() * 0.18; // 18% tax rate for Rwanda
   };
 
   const getFinalTotal = () => {

@@ -705,6 +705,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 3,
+        unitType: "set",
       },
     ];
 
@@ -717,6 +719,8 @@ export class MemStorage implements IStorage {
         inStock: productData.inStock ?? true,
         stockLevel: productData.stockLevel ?? "In Stock",
         isNew: productData.isNew ?? false,
+        setPieces: productData.setPieces ?? 1,
+        unitType: productData.unitType ?? "piece",
       };
       this.products.set(id, product);
     });
