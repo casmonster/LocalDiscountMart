@@ -325,6 +325,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Denim Jacket",
@@ -338,6 +340,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Cotton T-Shirt",
@@ -351,6 +355,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 2,
+        unitType: "pack",
       },
       {
         name: "Leather Belt",
@@ -364,6 +370,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Casual Pants",
@@ -377,6 +385,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Winter Coat",
@@ -390,6 +400,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 1,
+        unitType: "piece",
       },
 
       // Tableware Category (ID: 2) - 6 products
@@ -405,6 +417,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 12,
+        unitType: "set",
       },
       {
         name: "Crystal Glass Set",
@@ -418,6 +432,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 6,
+        unitType: "set",
       },
       {
         name: "Porcelain Tea Set",
@@ -431,6 +447,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 8,
+        unitType: "set",
       },
       {
         name: "Stainless Steel Cutlery Set",
@@ -444,6 +462,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 16,
+        unitType: "set",
       },
       {
         name: "Bamboo Serving Tray",
@@ -457,6 +477,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Wine Glass Collection",
@@ -470,6 +492,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "Low Stock",
         isNew: false,
+        setPieces: 4,
+        unitType: "set",
       },
 
       // Kitchen Category (ID: 3) - 7 products
@@ -485,7 +509,9 @@ export class MemStorage implements IStorage {
         categoryId: 3,
         inStock: true,
         stockLevel: "In Stock",
-        isNew: false
+        isNew: false,
+        setPieces: 5,
+        unitType: "set",
       },
       {
         name: "Glass Drinkware Collection",
@@ -500,6 +526,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 8,
+        unitType: "set",
       },
       {
         name: "Ceramic Plate Set",
@@ -514,6 +542,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "Low Stock",
         isNew: false,
+        setPieces: 6,
+        unitType: "set",
       },
       {
         name: "Non-Stick Pan Set",
@@ -527,6 +557,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 3,
+        unitType: "set",
       },
       {
         name: "Kitchen Knife Set",
@@ -540,6 +572,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 7,
+        unitType: "set",
       },
       {
         name: "Wooden Cutting Board",
@@ -553,6 +587,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Electric Coffee Maker",
@@ -566,6 +602,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 1,
+        unitType: "piece",
       },
 
       // Home Decor Category (ID: 4) - 7 products
@@ -581,6 +619,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Ceramic Vase Set",
@@ -593,6 +633,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 3,
+        unitType: "set",
       },
       {
         name: "Cotton Throw Blanket",
@@ -605,6 +647,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Wall Art Canvas Set",
@@ -618,6 +662,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 3,
+        unitType: "set",
       },
       {
         name: "Decorative Mirror",
@@ -631,6 +677,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: false,
+        setPieces: 1,
+        unitType: "piece",
       },
       {
         name: "Scented Candle Set",
@@ -643,6 +691,8 @@ export class MemStorage implements IStorage {
         inStock: true,
         stockLevel: "In Stock",
         isNew: true,
+        setPieces: 4,
+        unitType: "set",
       },
       {
         name: "Indoor Plant Collection",
