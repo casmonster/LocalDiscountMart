@@ -251,8 +251,16 @@ export default function Checkout() {
                       />
                       <div className="ml-4 flex-grow">
                         <h3 className="font-medium">{item.product.name}</h3>
+                        {item.product.setPieces > 1 && (
+                          <p className="text-xs text-gray-600">
+                            {item.product.setPieces} {item.product.unitType === "set" ? "pieces per set" : `${item.product.unitType}s included`}
+                          </p>
+                        )}
                         <p className="text-blue-800 font-bold">
                           {formatRwandanFrancs(convertToRwandanFrancs(item.product.discountPrice || item.product.price))}
+                          {item.product.setPieces > 1 && (
+                            <span className="text-sm text-gray-600 ml-1">per {item.product.unitType}</span>
+                          )}
                         </p>
                         <div className="flex items-center mt-2">
                           <Button
