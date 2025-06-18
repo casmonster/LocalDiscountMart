@@ -18,6 +18,8 @@ type ProductCardProps = {
   discountPrice: number | null;
   stockLevel: string;
   isNew?: boolean;
+  setPieces?: number;
+  unitType?: string;
 };
 
 export default function ProductCard({
@@ -29,6 +31,8 @@ export default function ProductCard({
   discountPrice,
   stockLevel,
   isNew = false,
+  setPieces = 1,
+  unitType = "piece",
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -212,6 +216,15 @@ export default function ProductCard({
               <h3 className="font-medium text-gray-900 line-clamp-2 group-hover:text-primary transition-colors text-base/tight flex-grow">
                 {name}
               </h3>
+              
+              {/* Set information */}
+              {setPieces > 1 && (
+                <div className="mt-1">
+                  <span className="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {setPieces} {unitType === "set" ? "pieces per set" : `${unitType}s included`}
+                  </span>
+                </div>
+              )}
               
               {/* Price display - Rwandan Francs */}
               <div className="flex items-center mt-2">
