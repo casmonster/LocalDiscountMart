@@ -113,16 +113,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getCartTotal())}</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getCartTotal()))}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Tax (8%)</span>
-                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getTaxAmount())}</span>
+                  <span>Tax (18%)</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getTaxAmount()))}</span>
                 </div>
                 <Separator className="my-2 bg-gray-200" />
                 <div className="flex justify-between text-lg">
                   <span className="font-bold">Total</span>
-                  <span className="font-bold text-blue-800">{formatRwandanFrancs(getFinalTotal())}</span>
+                  <span className="font-bold text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getFinalTotal()))}</span>
                 </div>
               </div>
 

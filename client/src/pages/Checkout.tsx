@@ -79,11 +79,12 @@ export default function Checkout() {
         order: {
           ...data,
           totalAmount: getFinalTotal(),
+          status: "pending",
         },
         items: cartItems.map(item => ({
           productId: item.productId,
           quantity: item.quantity,
-          price: item.product.discountPrice || item.product.price,
+          price: (item.product.discountPrice || item.product.price) * (item.product.setPieces || 1),
         })),
       };
 
@@ -300,16 +301,16 @@ export default function Checkout() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getCartTotal())}</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getCartTotal()))}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tax (8%):</span>
-                  <span className="font-medium text-blue-800">{formatRwandanFrancs(getTaxAmount())}</span>
+                  <span>Tax (18%):</span>
+                  <span className="font-medium text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getTaxAmount()))}</span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between text-lg">
                   <span className="font-bold">Total:</span>
-                  <span className="font-bold text-blue-800">{formatRwandanFrancs(getFinalTotal())}</span>
+                  <span className="font-bold text-blue-800">{formatRwandanFrancs(convertToRwandanFrancs(getFinalTotal()))}</span>
                 </div>
               </div>
             </CardContent>
@@ -319,13 +320,6 @@ export default function Checkout() {
                   By placing your order, you agree to our terms and conditions. 
                   Your items will be available for pickup at our store location.
                 </p>
-                <Button
-                  className="w-full"
-                  onClick={form.handleSubmit(onSubmit)}
-                  disabled={isSubmitting || cartItems.length === 0}
-                >
-                  {isSubmitting ? "Processing..." : "Place Order"}
-                </Button>
               </div>
             </CardFooter>
           </Card>
