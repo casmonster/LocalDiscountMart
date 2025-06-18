@@ -87,6 +87,9 @@ Changelog:
 - June 15, 2025. Fixed TypeScript errors in ProductDetail.tsx and OrderStatus.tsx by adding proper type imports and explicit queryFn functions
 - June 15, 2025. Created comprehensive customer service system with My Account, Order Status, FAQ, Help Center, and Newsletter pages
 - June 15, 2025. Added complete legal pages: Privacy Policy, Terms of Service, and Sitemap with authentic content for Rwanda business
+- June 18, 2025. Fixed order placement validation errors by updating insertOrderItemSchema to exclude orderId field during creation
+- June 18, 2025. Verified and confirmed "Add to Cart" functionality working correctly for all products including Ceramic Plate Set
+- June 18, 2025. Implemented proper set size pricing display and currency conversion from USD to RWF with 18% tax rate
 ```
 
 ## User Preferences
