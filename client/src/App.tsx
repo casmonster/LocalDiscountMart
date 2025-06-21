@@ -43,6 +43,7 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import Sitemap from "@/pages/Sitemap";
 import Search from "@/pages/Search";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 
 function Router() {
@@ -74,6 +75,7 @@ function Router() {
           <Route path="/privacy" component={PrivacyPolicy} />
           <Route path="/terms" component={TermsOfService} />
           <Route path="/sitemap" component={Sitemap} />
+          <Route path="/admin/orders/manage" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>
       </div>
