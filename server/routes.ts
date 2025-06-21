@@ -211,6 +211,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch order" });
     }
   });
+
+  // Admin endpoint to update order status
+  apiRouter.patch("/orders/:id/status", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid order ID" });
+      }
+
+      const statusSchema = z.object({
+        status: z.enum(["pending", "processing", "shipped", "delivered", "cancelled"])
+      });
+      
+      const { status } = statusSchema.parse(req.body);
+      
+      const updatedOrder = await storage.updateOrderStatus(id, status);
+      
+      if (!updatedOrder) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      res.json(updatedOrder);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid status", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update order status" });
+    }
+  });
+
+  // Admin endpoint to get all orders
+  apiRouter.get("/admin/orders", async (_req: Request, res: Response) => {
+    try {
+      const orders = await storage.getAllOrders();
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
   
   // Register API routes
   app.use("/api", apiRouter);

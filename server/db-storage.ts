@@ -139,4 +139,42 @@ export class DatabaseStorage implements IStorage {
       items
     };
   }
+
+  async updateOrderStatus(id: number, status: string): Promise<Order | undefined> {
+    const [updatedOrder] = await db
+      .update(orders)
+      .set({ status })
+      .where(eq(orders.id, id))
+      .returning();
+    
+    return updatedOrder || undefined;
+  }
+
+  async getAllOrders(): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]> {
+    const allOrders = await db.select().from(orders);
+    
+    const ordersWithItems = await Promise.all(
+      allOrders.map(async (order) => {
+        const items = await db
+          .select({
+            id: orderItems.id,
+            orderId: orderItems.orderId,
+            productId: orderItems.productId,
+            quantity: orderItems.quantity,
+            price: orderItems.price,
+            product: products,
+          })
+          .from(orderItems)
+          .innerJoin(products, eq(orderItems.productId, products.id))
+          .where(eq(orderItems.orderId, order.id));
+
+        return {
+          ...order,
+          items,
+        };
+      })
+    );
+
+    return ordersWithItems;
+  }
 }
