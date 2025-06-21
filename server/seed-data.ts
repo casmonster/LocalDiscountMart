@@ -194,3 +194,8 @@ export async function seedDatabase() {
 
   console.log("Database seeding completed successfully!");
 }
+
+// Run seeding if this file is executed directly
+if (require.main === module) {
+  seedDatabase().catch(console.error);
+}
