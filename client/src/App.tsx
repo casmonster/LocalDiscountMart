@@ -42,6 +42,7 @@ import Newsletter from "@/pages/Newsletter";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
 import Sitemap from "@/pages/Sitemap";
+import Search from "@/pages/Search";
 
 
 function Router() {
@@ -57,6 +58,7 @@ function Router() {
           <Route path="/checkout" component={Checkout} />
           <Route path="/order-confirmation/:id" component={OrderConfirmation} />
           <Route path="/store-info" component={StoreInfo} />
+          <Route path="/search" component={Search} />
           <Route path="/wishlist" component={Wishlist} />
           <Route path="/new-arrivals" component={NewArrivals} />
           <Route path="/clearance" component={Clearance} />

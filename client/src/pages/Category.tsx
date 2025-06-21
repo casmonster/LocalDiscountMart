@@ -65,23 +65,24 @@ export default function Category({ params }: { params: { slug: string } }) {
   const [, setLocation] = useLocation();
   const [sortBy, setSortBy] = useState<string>("default");
 
-  const { data: category, isLoading: categoryLoading } = useQuery<Category>({
-    queryKey: [`/api/categories/${slug}`]
+  const { data: category, isLoading: categoryLoading, error: categoryError } = useQuery<Category>({
+    queryKey: [`/api/categories/${slug}`],
+    retry: 1
   });
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: [`/api/products/category/${category?.id}`],
-    enabled: !!category?.id
+    enabled: !!category?.id,
+    retry: 1
   });
 
   useEffect(() => {
-    // Log more information about the category and products
     console.log("Category data:", category);
     
-    if (category === null) {
+    if (categoryError || (category === null && !categoryLoading)) {
       setLocation("/not-found");
     }
-  }, [category, setLocation]);
+  }, [category, categoryError, categoryLoading, setLocation]);
 
   const getSortedProducts = () => {
     if (!products) return [];
