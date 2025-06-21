@@ -724,6 +724,38 @@ export class MemStorage implements IStorage {
       };
       this.products.set(id, product);
     });
+
+    // Add sample orders for testing
+    const sampleOrders = [
+      {
+        customerName: "Income tax",
+        customerEmail: "mugbetrinity@gmail.com",
+        customerPhone: "250 80 152723",
+        totalAmount: 35.3882,
+        status: "pending"
+      }
+    ];
+
+    sampleOrders.forEach((orderData) => {
+      const orderId = this.currentOrderId++;
+      const order: Order = {
+        ...orderData,
+        id: orderId,
+        createdAt: new Date()
+      };
+      this.orders.set(orderId, order);
+
+      // Add corresponding order item
+      const orderItemId = this.currentOrderItemId++;
+      const orderItem: OrderItem = {
+        id: orderItemId,
+        orderId: orderId,
+        productId: 1,
+        quantity: 1,
+        price: 29.99
+      };
+      this.orderItems.set(orderItemId, orderItem);
+    });
   }
 }
 

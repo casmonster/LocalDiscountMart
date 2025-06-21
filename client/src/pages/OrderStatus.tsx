@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Search, Package, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,17 @@ import type { Order, OrderItem, Product } from "@shared/schema";
 export default function OrderStatus() {
   const [orderId, setOrderId] = useState("");
   const [searchOrderId, setSearchOrderId] = useState("");
+  const [location] = useLocation();
+
+  // Check for order ID in URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams(location.split('?')[1] || '');
+    const urlOrderId = params.get('id');
+    if (urlOrderId) {
+      setOrderId(urlOrderId);
+      setSearchOrderId(urlOrderId);
+    }
+  }, [location]);
 
   const { data: order, isLoading, error } = useQuery<Order & { items: (OrderItem & { product: Product })[] }>({
     queryKey: [`/api/orders/${searchOrderId}`],
