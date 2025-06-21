@@ -15,7 +15,13 @@ export default function OrderStatus() {
 
   const { data: order, isLoading, error } = useQuery<Order & { items: (OrderItem & { product: Product })[] }>({
     queryKey: [`/api/orders/${searchOrderId}`],
-    enabled: !!searchOrderId && searchOrderId.length > 0
+    queryFn: async () => {
+      const response = await fetch(`/api/orders/${searchOrderId}`);
+      if (!response.ok) throw new Error('Order not found');
+      return response.json();
+    },
+    enabled: !!searchOrderId && searchOrderId.length > 0,
+    retry: false
   });
 
   const handleSearch = () => {

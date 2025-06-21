@@ -11,6 +11,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+import type { Category, Product } from "@shared/schema";
 
 // Helper function to get category-specific properties
 function getCategoryProperties(categorySlug: string, product: any) {

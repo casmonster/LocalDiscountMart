@@ -29,7 +29,8 @@ export default function Search() {
       if (!response.ok) throw new Error('Failed to search products');
       return response.json();
     },
-    enabled: !!activeQuery.trim()
+    enabled: !!activeQuery.trim(),
+    retry: 1
   });
 
   const handleSearchSubmit = (e: React.FormEvent) => {
