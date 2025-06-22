@@ -48,7 +48,6 @@ export default function Checkout() {
     getTaxAmount, 
     getFinalTotal, 
     clearCart,
-    cartId,
     isLoading 
   } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
