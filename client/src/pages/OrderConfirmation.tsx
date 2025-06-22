@@ -14,12 +14,13 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, MapPin, Phone, Mail } from "lucide-react";
 import { formatRwandanFrancs, convertToRwandanFrancs } from "@/lib/currency";
+import type { Order, OrderItem, Product } from "@shared/schema";
 
 export default function OrderConfirmation({ params }: { params: { id: string } }) {
   const { id } = params;
   const [, navigate] = useLocation();
 
-  const { data: order, isLoading, error } = useQuery({
+  const { data: order, isLoading, error } = useQuery<Order & { items: (OrderItem & { product: Product })[] }>({
     queryKey: [`/api/orders/${id}`],
   });
 
@@ -66,6 +67,16 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
           <CardDescription>
             Thank you for your order. We've received your request and will begin processing it immediately.
           </CardDescription>
+          {order && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800 font-medium">
+                📋 Your Order ID: <span className="text-lg font-bold">#{order.id}</span>
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                Save this number to track your order status
+              </p>
+            </div>
+          )}
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="bg-primary/5 p-4 rounded-lg">
@@ -78,7 +89,7 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
               <div>
                 <p className="text-gray-500">Date:</p>
                 <p className="font-medium">
-                  {new Date(order.createdAt).toLocaleDateString()}
+                  {order?.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
               <div>
@@ -158,7 +169,10 @@ export default function OrderConfirmation({ params }: { params: { id: string } }
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex justify-center space-x-4">
+          <Link href="/orders">
+            <Button variant="outline">Track This Order</Button>
+          </Link>
           <Link href="/">
             <Button>Continue Shopping</Button>
           </Link>
