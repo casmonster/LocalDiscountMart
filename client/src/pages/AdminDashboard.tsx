@@ -9,17 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatRwandanFrancs } from "@/lib/currency";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Clock, Truck, CheckCircle, XCircle, Mail, Users } from "lucide-react";
+import type { Order, Newsletter } from "@shared/schema";
 
 type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 
-interface Order {
-  id: number;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  totalAmount: number;
-  status: OrderStatus;
-  createdAt: string;
+interface OrderWithItems extends Order {
   items: Array<{
     id: number;
     orderId: number;
@@ -44,12 +38,6 @@ interface Order {
   }>;
 }
 
-interface Newsletter {
-  id: number;
-  email: string;
-  subscribedAt: string;
-}
-
 const statusConfig = {
   pending: { label: "Pending", icon: Clock, color: "bg-yellow-100 text-yellow-800" },
   processing: { label: "Processing", icon: Package, color: "bg-blue-100 text-blue-800" },
@@ -64,7 +52,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // Fetch all orders
-  const { data: orders, isLoading } = useQuery<Order[]>({
+  const { data: orders, isLoading } = useQuery<OrderWithItems[]>({
     queryKey: ["/api/admin/orders"],
   });
 
@@ -116,8 +104,10 @@ export default function AdminDashboard() {
     return statusFlow[currentStatus];
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return "N/A";
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return dateObj.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -177,8 +167,9 @@ export default function AdminDashboard() {
 
           <div className="grid gap-6">
             {orders?.map((order) => {
-              const StatusIcon = statusConfig[order.status].icon;
-              const nextStatus = getNextStatus(order.status);
+              const orderStatus = order.status as OrderStatus;
+              const StatusIcon = statusConfig[orderStatus].icon;
+              const nextStatus = getNextStatus(orderStatus);
               
               return (
                 <Card key={order.id} className="w-full">
@@ -187,9 +178,9 @@ export default function AdminDashboard() {
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           Order #{order.id}
-                          <Badge className={statusConfig[order.status].color}>
+                          <Badge className={statusConfig[orderStatus].color}>
                             <StatusIcon className="w-3 h-3 mr-1" />
-                            {statusConfig[order.status].label}
+                            {statusConfig[orderStatus].label}
                           </Badge>
                         </CardTitle>
                         <CardDescription>
@@ -218,7 +209,7 @@ export default function AdminDashboard() {
                               <SelectItem 
                                 key={status} 
                                 value={status}
-                                disabled={status === order.status}
+                                disabled={status === orderStatus}
                               >
                                 <div className="flex items-center gap-2">
                                   <config.icon className="w-4 h-4" />
