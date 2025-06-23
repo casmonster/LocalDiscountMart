@@ -6,16 +6,19 @@ import {
   cartItems, 
   orders, 
   orderItems,
+  newsletters,
   type Category,
   type Product,
   type CartItem,
   type Order,
   type OrderItem,
+  type Newsletter,
   type InsertCategory,
   type InsertProduct,
   type InsertCartItem,
   type InsertOrder,
-  type InsertOrderItem
+  type InsertOrderItem,
+  type InsertNewsletter
 } from "@shared/schema";
 import type { IStorage } from "./storage";
 
@@ -176,5 +179,18 @@ export class DatabaseStorage implements IStorage {
     );
 
     return ordersWithItems;
+  }
+
+  async addNewsletterSubscription(email: string): Promise<Newsletter> {
+    const [subscription] = await db
+      .insert(newsletters)
+      .values({ email })
+      .returning();
+    
+    return subscription;
+  }
+
+  async getAllNewsletterSubscriptions(): Promise<Newsletter[]> {
+    return await db.select().from(newsletters).orderBy(newsletters.subscribedAt);
   }
 }

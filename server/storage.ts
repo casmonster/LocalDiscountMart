@@ -14,6 +14,9 @@ import {
   orderItems,
   OrderItem,
   InsertOrderItem,
+  newsletters,
+  Newsletter,
+  InsertNewsletter,
 } from "@shared/schema";
 
 export interface IStorage {
@@ -60,12 +63,14 @@ export class MemStorage implements IStorage {
   private cartItems: Map<number, CartItem>;
   private orders: Map<number, Order>;
   private orderItems: Map<number, OrderItem>;
+  private newsletters: Map<number, Newsletter>;
 
   private currentCategoryId: number;
   private currentProductId: number;
   private currentCartItemId: number;
   private currentOrderId: number;
   private currentOrderItemId: number;
+  private currentNewsletterId: number;
 
   constructor() {
     this.categories = new Map();
@@ -284,6 +289,23 @@ export class MemStorage implements IStorage {
     });
 
     return ordersWithItems;
+  }
+
+  async addNewsletterSubscription(email: string): Promise<Newsletter> {
+    const id = this.newsletters.size + 1;
+    const subscription: Newsletter = {
+      id,
+      email,
+      subscribedAt: new Date(),
+    };
+    this.newsletters.set(id, subscription);
+    return subscription;
+  }
+
+  async getAllNewsletterSubscriptions(): Promise<Newsletter[]> {
+    return Array.from(this.newsletters.values()).sort((a, b) => 
+      new Date(b.subscribedAt).getTime() - new Date(a.subscribedAt).getTime()
+    );
   }
 
   // Initialize sample data
