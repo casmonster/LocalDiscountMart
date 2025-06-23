@@ -9,33 +9,47 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatRwandanFrancs } from "@/lib/currency";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Clock, Truck, CheckCircle, XCircle, Mail, Users } from "lucide-react";
-import type { Order, Newsletter } from "@shared/schema";
 
 type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 
-interface OrderWithItems extends Order {
-  items: Array<{
+interface OrderItem {
+  id: number;
+  orderId: number;
+  productId: number;
+  quantity: number;
+  price: number;
+  product: {
     id: number;
-    orderId: number;
-    productId: number;
-    quantity: number;
+    name: string;
+    slug: string;
+    description: string;
+    imageUrl: string;
     price: number;
-    product: {
-      id: number;
-      name: string;
-      slug: string;
-      description: string;
-      imageUrl: string;
-      price: number;
-      discountPrice: number | null;
-      categoryId: number;
-      inStock: boolean;
-      stockLevel: string;
-      isNew: boolean;
-      setPieces: number;
-      unitType: string;
-    };
-  }>;
+    discountPrice: number | null;
+    categoryId: number;
+    inStock: boolean;
+    stockLevel: string;
+    isNew: boolean;
+    setPieces: number;
+    unitType: string;
+  };
+}
+
+interface Order {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  totalAmount: number;
+  status: OrderStatus;
+  createdAt: string;
+  items: OrderItem[];
+}
+
+interface Newsletter {
+  id: number;
+  email: string;
+  subscribedAt: string;
 }
 
 const statusConfig = {
@@ -52,7 +66,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // Fetch all orders
-  const { data: orders, isLoading } = useQuery<OrderWithItems[]>({
+  const { data: orders, isLoading } = useQuery<Order[]>({
     queryKey: ["/api/admin/orders"],
   });
 
@@ -104,10 +118,8 @@ export default function AdminDashboard() {
     return statusFlow[currentStatus];
   };
 
-  const formatDate = (date: Date | string | null) => {
-    if (!date) return "N/A";
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    return dateObj.toLocaleDateString("en-US", {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -167,9 +179,8 @@ export default function AdminDashboard() {
 
           <div className="grid gap-6">
             {orders?.map((order) => {
-              const orderStatus = order.status as OrderStatus;
-              const StatusIcon = statusConfig[orderStatus].icon;
-              const nextStatus = getNextStatus(orderStatus);
+              const StatusIcon = statusConfig[order.status].icon;
+              const nextStatus = getNextStatus(order.status);
               
               return (
                 <Card key={order.id} className="w-full">
@@ -178,9 +189,9 @@ export default function AdminDashboard() {
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           Order #{order.id}
-                          <Badge className={statusConfig[orderStatus].color}>
+                          <Badge className={statusConfig[order.status].color}>
                             <StatusIcon className="w-3 h-3 mr-1" />
-                            {statusConfig[orderStatus].label}
+                            {statusConfig[order.status].label}
                           </Badge>
                         </CardTitle>
                         <CardDescription>
@@ -209,7 +220,7 @@ export default function AdminDashboard() {
                               <SelectItem 
                                 key={status} 
                                 value={status}
-                                disabled={status === orderStatus}
+                                disabled={status === order.status}
                               >
                                 <div className="flex items-center gap-2">
                                   <config.icon className="w-4 h-4" />
