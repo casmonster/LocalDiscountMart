@@ -126,7 +126,7 @@ export default function AdminDashboard() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || newslettersLoading) {
     return (
       <div className="container mx-auto p-6">
         <div className="animate-pulse space-y-4">
@@ -142,111 +142,198 @@ export default function AdminDashboard() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Order Management</h1>
-          <p className="text-muted-foreground">Manage customer orders and update their status</p>
+          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          <p className="text-muted-foreground">Manage orders and newsletter subscriptions</p>
         </div>
-        <Badge variant="secondary" className="text-sm">
-          {orders?.length || 0} Total Orders
-        </Badge>
+        <div className="flex gap-2">
+          <Badge variant="secondary" className="text-sm">
+            {orders?.length || 0} Orders
+          </Badge>
+          <Badge variant="secondary" className="text-sm">
+            {newsletters?.length || 0} Subscribers
+          </Badge>
+        </div>
       </div>
 
-      <div className="grid gap-6">
-        {orders?.map((order) => {
-          const StatusIcon = statusConfig[order.status].icon;
-          const nextStatus = getNextStatus(order.status);
-          
-          return (
-            <Card key={order.id} className="w-full">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      Order #{order.id}
-                      <Badge className={statusConfig[order.status].color}>
-                        <StatusIcon className="w-3 h-3 mr-1" />
-                        {statusConfig[order.status].label}
-                      </Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      Placed on {formatDate(order.createdAt)} • {formatRwandanFrancs(order.totalAmount)}
-                    </CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    {nextStatus && (
-                      <Button
-                        onClick={() => handleStatusUpdate(order.id, nextStatus)}
-                        disabled={updateStatusMutation.isPending}
-                        size="sm"
-                      >
-                        Move to {statusConfig[nextStatus].label}
-                      </Button>
-                    )}
-                    <Select
-                      onValueChange={(value: OrderStatus) => handleStatusUpdate(order.id, value)}
-                      disabled={updateStatusMutation.isPending}
-                    >
-                      <SelectTrigger className="w-40">
-                        <SelectValue placeholder="Change Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.entries(statusConfig).map(([status, config]) => (
-                          <SelectItem 
-                            key={status} 
-                            value={status}
-                            disabled={status === order.status}
+      <Tabs defaultValue="orders" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="orders" className="flex items-center gap-2">
+            <Package className="w-4 h-4" />
+            Orders
+          </TabsTrigger>
+          <TabsTrigger value="newsletters" className="flex items-center gap-2">
+            <Mail className="w-4 h-4" />
+            Newsletter
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="orders" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Order Management</h2>
+            <Badge variant="outline" className="text-sm">
+              {orders?.length || 0} Total Orders
+            </Badge>
+          </div>
+
+          <div className="grid gap-6">
+            {orders?.map((order) => {
+              const StatusIcon = statusConfig[order.status].icon;
+              const nextStatus = getNextStatus(order.status);
+              
+              return (
+                <Card key={order.id} className="w-full">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          Order #{order.id}
+                          <Badge className={statusConfig[order.status].color}>
+                            <StatusIcon className="w-3 h-3 mr-1" />
+                            {statusConfig[order.status].label}
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription>
+                          Placed on {formatDate(order.createdAt)} • {formatRwandanFrancs(order.totalAmount)}
+                        </CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {nextStatus && (
+                          <Button
+                            onClick={() => handleStatusUpdate(order.id, nextStatus)}
+                            disabled={updateStatusMutation.isPending}
+                            size="sm"
                           >
-                            {config.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Customer Information</h4>
-                    <div className="space-y-1 text-sm">
-                      <p><strong>Name:</strong> {order.customerName}</p>
-                      <p><strong>Email:</strong> {order.customerEmail}</p>
-                      <p><strong>Phone:</strong> {order.customerPhone}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Order Items</h4>
-                    <div className="space-y-2">
-                      {order.items.map((item) => (
-                        <div key={item.id} className="flex justify-between text-sm">
-                          <span>
-                            {item.product.name} × {item.quantity}
-                          </span>
-                          <span>{formatRwandanFrancs(item.price)}</span>
-                        </div>
-                      ))}
-                      <Separator />
-                      <div className="flex justify-between font-semibold">
-                        <span>Total</span>
-                        <span>{formatRwandanFrancs(order.totalAmount)}</span>
+                            Move to {statusConfig[nextStatus].label}
+                          </Button>
+                        )}
+                        <Select
+                          onValueChange={(value: OrderStatus) => handleStatusUpdate(order.id, value)}
+                          disabled={updateStatusMutation.isPending}
+                        >
+                          <SelectTrigger className="w-40">
+                            <SelectValue placeholder="Change Status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(statusConfig).map(([status, config]) => (
+                              <SelectItem 
+                                key={status} 
+                                value={status}
+                                disabled={status === order.status}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <config.icon className="w-4 h-4" />
+                                  {config.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium">Customer:</span>
+                          <p>{order.customerName}</p>
+                          <p className="text-muted-foreground">{order.customerEmail}</p>
+                          <p className="text-muted-foreground">{order.customerPhone}</p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Items:</span>
+                          <p>{order.items.length} item(s)</p>
+                        </div>
+                        <div>
+                          <span className="font-medium">Total:</span>
+                          <p className="text-lg font-semibold">{formatRwandanFrancs(order.totalAmount)}</p>
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div>
+                        <h4 className="font-medium mb-2">Order Items</h4>
+                        <div className="space-y-2">
+                          {order.items.map((item) => (
+                            <div key={item.id} className="flex justify-between items-center text-sm">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">{item.quantity}x</span>
+                                <span>{item.product.name}</span>
+                              </div>
+                              <span>{formatRwandanFrancs(item.price * item.quantity)}</span>
+                            </div>
+                          ))}
+                          <Separator />
+                          <div className="flex justify-between font-semibold">
+                            <span>Total</span>
+                            <span>{formatRwandanFrancs(order.totalAmount)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {!orders?.length && (
+            <Card>
+              <CardContent className="text-center py-8">
+                <Package className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No Orders Found</h3>
+                <p className="text-muted-foreground">Orders will appear here once customers start placing them.</p>
               </CardContent>
             </Card>
-          );
-        })}
-      </div>
+          )}
+        </TabsContent>
 
-      {!orders?.length && (
-        <Card>
-          <CardContent className="text-center py-8">
-            <Package className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No Orders Found</h3>
-            <p className="text-muted-foreground">Orders will appear here once customers start placing them.</p>
-          </CardContent>
-        </Card>
-      )}
+        <TabsContent value="newsletters" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Newsletter Subscriptions</h2>
+            <Badge variant="outline" className="text-sm">
+              {newsletters?.length || 0} Total Subscribers
+            </Badge>
+          </div>
+
+          <div className="grid gap-4">
+            {newsletters?.map((newsletter) => (
+              <Card key={newsletter.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Mail className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{newsletter.email}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Subscribed on {formatDate(newsletter.subscribedAt)}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge variant="secondary">
+                      <Users className="w-3 h-3 mr-1" />
+                      Subscribed
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {!newsletters?.length && (
+            <Card>
+              <CardContent className="text-center py-8">
+                <Mail className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No Newsletter Subscriptions</h3>
+                <p className="text-muted-foreground">Email subscriptions will appear here when customers sign up.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
