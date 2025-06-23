@@ -78,12 +78,14 @@ export class MemStorage implements IStorage {
     this.cartItems = new Map();
     this.orders = new Map();
     this.orderItems = new Map();
+    this.newsletters = new Map();
 
     this.currentCategoryId = 1;
     this.currentProductId = 1;
     this.currentCartItemId = 1;
     this.currentOrderId = 1;
     this.currentOrderItemId = 1;
+    this.currentNewsletterId = 1;
 
     // Initialize with sample data
     this.initSampleData();
@@ -292,7 +294,7 @@ export class MemStorage implements IStorage {
   }
 
   async addNewsletterSubscription(email: string): Promise<Newsletter> {
-    const id = this.newsletters.size + 1;
+    const id = this.currentNewsletterId++;
     const subscription: Newsletter = {
       id,
       email,

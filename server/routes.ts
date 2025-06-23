@@ -250,6 +250,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch orders" });
     }
   });
+
+  // Newsletter subscription endpoints
+  apiRouter.post("/newsletter", async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+      
+      const subscription = await storage.addNewsletterSubscription(email);
+      res.json(subscription);
+    } catch (error) {
+      console.error("Error adding newsletter subscription:", error);
+      res.status(500).json({ error: "Failed to add newsletter subscription" });
+    }
+  });
+
+  apiRouter.get("/admin/newsletters", async (_req: Request, res: Response) => {
+    try {
+      const subscriptions = await storage.getAllNewsletterSubscriptions();
+      res.json(subscriptions);
+    } catch (error) {
+      console.error("Error fetching newsletter subscriptions:", error);
+      res.status(500).json({ error: "Failed to fetch newsletter subscriptions" });
+    }
+  });
   
   // Register API routes
   app.use("/api", apiRouter);

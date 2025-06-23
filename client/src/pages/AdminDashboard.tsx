@@ -5,9 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatRwandanFrancs } from "@/lib/currency";
 import { useToast } from "@/hooks/use-toast";
-import { Package, Clock, Truck, CheckCircle, XCircle } from "lucide-react";
+import { Package, Clock, Truck, CheckCircle, XCircle, Mail, Users } from "lucide-react";
 
 type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 
@@ -43,6 +44,12 @@ interface Order {
   }>;
 }
 
+interface Newsletter {
+  id: number;
+  email: string;
+  subscribedAt: string;
+}
+
 const statusConfig = {
   pending: { label: "Pending", icon: Clock, color: "bg-yellow-100 text-yellow-800" },
   processing: { label: "Processing", icon: Package, color: "bg-blue-100 text-blue-800" },
@@ -59,6 +66,11 @@ export default function AdminDashboard() {
   // Fetch all orders
   const { data: orders, isLoading } = useQuery<Order[]>({
     queryKey: ["/api/admin/orders"],
+  });
+
+  // Fetch newsletter subscriptions
+  const { data: newsletters, isLoading: newslettersLoading } = useQuery<Newsletter[]>({
+    queryKey: ["/api/admin/newsletters"],
   });
 
   // Update order status mutation
