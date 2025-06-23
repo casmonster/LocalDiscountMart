@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatRwandanFrancs } from "@/lib/currency";
+import { formatRwandanFrancs, convertToRwandanFrancs } from "@/lib/currency";
 import type { Order, OrderItem, Product } from "@shared/schema";
 
 export default function OrderStatus() {
@@ -201,7 +201,7 @@ export default function OrderStatus() {
                           </div>
                         </div>
                         <p className="font-semibold text-gray-900">
-                          {formatRwandanFrancs(item.price)}
+                          {formatRwandanFrancs(convertToRwandanFrancs(item.price))}
                         </p>
                       </div>
                     ))}
@@ -209,7 +209,7 @@ export default function OrderStatus() {
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center text-lg font-semibold text-gray-900">
                       <span>Total</span>
-                      <span>{formatRwandanFrancs(order.totalAmount)}</span>
+                      <span>{formatRwandanFrancs(convertToRwandanFrancs(order.totalAmount))}</span>
                     </div>
                   </div>
                 </div>

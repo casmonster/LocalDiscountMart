@@ -48,6 +48,10 @@ export interface IStorage {
   >;
   updateOrderStatus(id: number, status: string): Promise<Order | undefined>;
   getAllOrders(): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]>;
+
+  // Newsletter
+  addNewsletterSubscription(email: string): Promise<Newsletter>;
+  getAllNewsletterSubscriptions(): Promise<Newsletter[]>;
 }
 
 export class MemStorage implements IStorage {
