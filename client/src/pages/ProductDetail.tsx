@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useCart } from "@/context/CartContext";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
+import { useWishlist } from "@/context/WishlistContext";
 import RecentlyViewedProducts from "@/components/product/RecentlyViewedProducts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,6 +19,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const [quantity, setQuantity] = useState(1);
   const { addToCart, isLoading: isCartLoading } = useCart();
   const { addToRecentlyViewed } = useRecentlyViewed();
+  const { isInWishlist, toggleWishlist } = useWishlist();
 
   const { data: product, isLoading } = useQuery<Product>({
     queryKey: [`/api/products/${slug}`],
@@ -66,6 +68,19 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
     }
   };
 
+  const handleToggleWishlist = () => {
+    if (product) {
+      toggleWishlist({
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        discountPrice: product.discountPrice,
+      });
+    }
+  };
+
   const incrementQuantity = () => setQuantity(q => q + 1);
   const decrementQuantity = () => setQuantity(q => Math.max(1, q - 1));
   
@@ -74,6 +89,7 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
   const discountPercentage = product?.discountPrice 
     ? Math.round(((product.price - product.discountPrice) / product.price) * 100) 
     : 0;
+  const inWishlist = product ? isInWishlist(product.id) : false;
 
   if (isLoading) {
     return (
@@ -194,8 +210,13 @@ export default function ProductDetail({ params }: { params: { slug: string } }) 
             >
               Add to Cart
             </Button>
-            <Button variant="outline" size="icon" className="text-gray-500">
-              <Heart className="h-5 w-5" />
+            <Button 
+              variant={inWishlist ? "default" : "outline"} 
+              size="icon" 
+              className={inWishlist ? "text-white bg-secondary hover:bg-secondary/90" : "text-gray-500 hover:text-secondary"}
+              onClick={handleToggleWishlist}
+            >
+              <Heart className={`h-5 w-5 ${inWishlist ? "fill-current" : ""}`} />
             </Button>
           </div>
           
