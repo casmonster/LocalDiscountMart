@@ -1,6 +1,9 @@
 import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+import { orders, orderItems } from "@shared/schema";
 import { z } from "zod";
 import { insertCartItemSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
 
@@ -249,14 +252,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid order ID" });
       }
 
-      const deleted = await storage.deleteOrder(id);
+      // Delete order items first (due to foreign key constraints)
+      await db.delete(orderItems).where(eq(orderItems.orderId, id));
       
-      if (!deleted) {
+      // Delete the order
+      const result = await db.delete(orders).where(eq(orders.id, id));
+      
+      if (result.rowCount === 0) {
         return res.status(404).json({ message: "Order not found" });
       }
       
       res.status(204).send();
     } catch (error) {
+      console.error("Error deleting order:", error);
       res.status(500).json({ message: "Failed to delete order" });
     }
   });
