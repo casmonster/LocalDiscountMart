@@ -4,7 +4,7 @@
 
 ## 🌟 Live Demo
 
-**[Visit Live Demo →](https://your-username.github.io/discountmart)**
+**[Visit Live Demo →](https://localdiscountmart.vercel.app)**
 
 A modern e-commerce application built for a local discount store in Kigali, Rwanda. Features a complete shopping experience with product browsing, cart management, order processing, and admin dashboard.
 
@@ -66,8 +66,8 @@ A modern e-commerce application built for a local discount store in Kigali, Rwan
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/discountmart.git
-   cd discountmart
+   git clone https://github.com/casmonster/LocalDiscountMart.git
+   cd LocalDiscountMart
    ```
 
 2. **Install dependencies**

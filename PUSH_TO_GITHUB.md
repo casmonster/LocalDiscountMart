@@ -55,7 +55,7 @@ git add .
 git commit -m "Initial commit: Complete DiscountMart e-commerce application with live demo"
 
 # Add your GitHub repository as remote
-git remote add origin https://github.com/yourusername/discountmart.git
+git remote add origin https://github.com/casmonster/LocalDiscountMart.git
 
 # Push to GitHub
 git branch -M main
