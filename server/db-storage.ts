@@ -153,6 +153,21 @@ export class DatabaseStorage implements IStorage {
     return updatedOrder || undefined;
   }
 
+  async deleteOrder(id: number): Promise<boolean> {
+    try {
+      // Delete order items first (due to foreign key constraints)
+      await db.delete(orderItems).where(eq(orderItems.orderId, id));
+      
+      // Delete the order
+      const result = await db.delete(orders).where(eq(orders.id, id));
+      
+      return result.rowCount !== null && result.rowCount > 0;
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      return false;
+    }
+  }
+
   async getAllOrders(): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]> {
     const allOrders = await db.select().from(orders);
     
