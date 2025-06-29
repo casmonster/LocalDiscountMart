@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatRwandanFrancs } from "@/lib/currency";
 import { useToast } from "@/hooks/use-toast";
-import { Package, Clock, Truck, CheckCircle, XCircle, Mail, Users } from "lucide-react";
+import { Package, Clock, Truck, CheckCircle, XCircle, Mail, Users, Trash2 } from "lucide-react";
 
 type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
 
@@ -103,8 +103,39 @@ export default function AdminDashboard() {
     },
   });
 
+  // Delete order mutation
+  const deleteOrderMutation = useMutation({
+    mutationFn: async (orderId: number) => {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete order");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/orders"] });
+      toast({
+        title: "Order Deleted",
+        description: "Order has been successfully deleted.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Delete Failed",
+        description: "Failed to delete order. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleStatusUpdate = (orderId: number, newStatus: OrderStatus) => {
     updateStatusMutation.mutate({ orderId, status: newStatus });
+  };
+
+  const handleDeleteOrder = (orderId: number) => {
+    if (window.confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
+      deleteOrderMutation.mutate(orderId);
+    }
   };
 
   const getNextStatus = (currentStatus: OrderStatus): OrderStatus | null => {
@@ -230,6 +261,18 @@ export default function AdminDashboard() {
                             ))}
                           </SelectContent>
                         </Select>
+                        {(order.status === "delivered" || order.status === "cancelled") && (
+                          <Button
+                            onClick={() => handleDeleteOrder(order.id)}
+                            disabled={deleteOrderMutation.isPending}
+                            variant="destructive"
+                            size="sm"
+                            className="flex items-center gap-1"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardHeader>

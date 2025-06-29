@@ -50,6 +50,7 @@ export interface IStorage {
     (Order & { items: (OrderItem & { product: Product })[] }) | undefined
   >;
   updateOrderStatus(id: number, status: string): Promise<Order | undefined>;
+  deleteOrder(id: number): Promise<boolean>;
   getAllOrders(): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]>;
 
   // Newsletter
@@ -267,6 +268,29 @@ export class MemStorage implements IStorage {
     const updatedOrder = { ...order, status };
     this.orders.set(id, updatedOrder);
     return updatedOrder;
+  }
+
+  async deleteOrder(id: number): Promise<boolean> {
+    const order = this.orders.get(id);
+    if (!order) {
+      return false;
+    }
+    
+    // Delete associated order items
+    const orderItemsToDelete: number[] = [];
+    this.orderItems.forEach((orderItem, itemId) => {
+      if (orderItem.orderId === id) {
+        orderItemsToDelete.push(itemId);
+      }
+    });
+    
+    orderItemsToDelete.forEach(itemId => {
+      this.orderItems.delete(itemId);
+    });
+    
+    // Delete the order
+    this.orders.delete(id);
+    return true;
   }
 
   async getAllOrders(): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]> {

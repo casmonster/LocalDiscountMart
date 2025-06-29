@@ -241,6 +241,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint to delete order
+  apiRouter.delete("/orders/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid order ID" });
+      }
+
+      const deleted = await storage.deleteOrder(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete order" });
+    }
+  });
+
   // Admin endpoint to get all orders
   apiRouter.get("/admin/orders", async (_req: Request, res: Response) => {
     try {
